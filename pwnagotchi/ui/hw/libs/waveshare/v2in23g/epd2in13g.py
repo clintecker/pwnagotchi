@@ -51,9 +51,9 @@ class EPD:
         self.width = EPD_WIDTH
         self.height = EPD_HEIGHT
         self.BLACK = 0x000000  # 00  BGR
-        self.WHITE = 0xffffff  # 01
-        self.YELLOW = 0x00ffff  # 10
-        self.RED = 0x0000ff  # 11
+        self.WHITE = 0xFFFFFF  # 01
+        self.YELLOW = 0x00FFFF  # 10
+        self.RED = 0x0000FF  # 11
         self.Gate_BITS = EPD_HEIGHT
         if self.width < 128:
             self.Source_BITS = 128
@@ -84,7 +84,7 @@ class EPD:
     def ReadBusy(self):
         logger.debug("e-Paper busy H")
         epdconfig.delay_ms(100)
-        while (epdconfig.digital_read(self.busy_pin) == 0):  # 0: idle, 1: busy
+        while epdconfig.digital_read(self.busy_pin) == 0:  # 0: idle, 1: busy
             epdconfig.delay_ms(5)
         logger.debug("e-Paper busy release")
 
@@ -98,11 +98,11 @@ class EPD:
 
     def TurnOnDisplay(self):
         self.send_command(0x12)  # DISPLAY_REFRESH
-        self.send_data(0X00)
+        self.send_data(0x00)
         self.ReadBusy()
 
     def init(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
         # EPD hardware init start
 
@@ -167,21 +167,25 @@ class EPD:
     def getbuffer(self, image):
         # Create a pallette with the 4 colors supported by the panel
         pal_image = Image.new("P", (1, 1))
-        pal_image.putpalette((0, 0, 0, 255, 255, 255, 255, 255, 0, 255, 0, 0) + (0, 0, 0) * 252)
+        pal_image.putpalette(
+            (0, 0, 0, 255, 255, 255, 255, 255, 0, 255, 0, 0) + (0, 0, 0) * 252
+        )
 
         # Check if we need to rotate the image
         imwidth, imheight = image.size
-        if (imwidth == self.width and imheight == self.height):
+        if imwidth == self.width and imheight == self.height:
             image_temp = image
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             image_temp = image.rotate(90, expand=True)
         else:
             logger.warning(
-                "Invalid image dimensions: %d x %d, expected %d x %d" % (imwidth, imheight, self.width, self.height))
+                "Invalid image dimensions: %d x %d, expected %d x %d"
+                % (imwidth, imheight, self.width, self.height)
+            )
 
         # Convert the soruce image to the 4 colors, dithering if needed
         image_4color = image_temp.convert("RGB").quantize(palette=pal_image)
-        buf_4color = bytearray(image_4color.tobytes('raw'))
+        buf_4color = bytearray(image_4color.tobytes("raw"))
 
         # into a single byte to transfer to the panel
         if self.width % 4 == 0:
@@ -194,11 +198,17 @@ class EPD:
         for j in range(0, Height):
             for i in range(0, Width):
                 if i == Width - 1:
-                    buf[i + j * Width] = (buf_4color[idx] << 6) + (buf_4color[idx + 1] << 4)
+                    buf[i + j * Width] = (buf_4color[idx] << 6) + (
+                        buf_4color[idx + 1] << 4
+                    )
                     idx = idx + 2
                 else:
-                    buf[i + j * Width] = (buf_4color[idx] << 6) + (buf_4color[idx + 1] << 4) + (
-                                buf_4color[idx + 2] << 2) + buf_4color[idx + 3]
+                    buf[i + j * Width] = (
+                        (buf_4color[idx] << 6)
+                        + (buf_4color[idx + 1] << 4)
+                        + (buf_4color[idx + 2] << 2)
+                        + buf_4color[idx + 3]
+                    )
                     idx = idx + 4
         return buf
 
@@ -235,8 +245,10 @@ class EPD:
         epdconfig.delay_ms(100)
 
         self.send_command(0x07)  # DEEP_SLEEP
-        self.send_data(0XA5)
+        self.send_data(0xA5)
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
+
 ### END OF FILE ###

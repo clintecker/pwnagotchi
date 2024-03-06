@@ -71,12 +71,12 @@ class EPD:
     def ReadBusy(self):
         logger.debug("e-Paper busy")
         busy = epdconfig.digital_read(self.busy_pin)
-        while (busy == 1):
+        while busy == 1:
             busy = epdconfig.digital_read(self.busy_pin)
         epdconfig.delay_ms(200)
 
     def init(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
 
         self.reset()
@@ -122,9 +122,9 @@ class EPD:
         self.send_data(0x01)  # LUT1, for white
 
         self.send_command(0x18)
-        self.send_data(0X80)
+        self.send_data(0x80)
         self.send_command(0x22)
-        self.send_data(0XB1)  # Load Temperature and waveform setting.
+        self.send_data(0xB1)  # Load Temperature and waveform setting.
         self.send_command(0x20)
         self.ReadBusy()  # waiting for the electronic paper IC to release the idle signal
 
@@ -140,18 +140,18 @@ class EPD:
     def getbuffer(self, image):
         # logger.debug("bufsiz = ",int(self.width/8) * self.height)
         buf = [0xFF] * (int(self.width / 8) * self.height)
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
-        logger.debug('imwidth = %d  imheight =  %d ', imwidth, imheight)
-        if (imwidth == self.width and imheight == self.height):
+        logger.debug("imwidth = %d  imheight =  %d ", imwidth, imheight)
+        if imwidth == self.width and imheight == self.height:
             logger.debug("Horizontal")
             for y in range(imheight):
                 for x in range(imwidth):
                     # Set the bits for the column of pixels at the current position.
                     if pixels[x, y] == 0:
                         buf[int((x + y * self.width) / 8)] &= ~(0x80 >> (x % 8))
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             logger.debug("Vertical")
             for y in range(imheight):
                 for x in range(imwidth):
@@ -163,7 +163,7 @@ class EPD:
 
     def display(self, imageblack, imagered):
         self.send_command(0x4F)
-        self.send_data(0xAf)
+        self.send_data(0xAF)
 
         self.send_command(0x24)
         for i in range(0, int(self.width * self.height / 8)):
@@ -181,11 +181,11 @@ class EPD:
 
     def Clear(self):
         self.send_command(0x4F)
-        self.send_data(0xAf)
+        self.send_data(0xAF)
 
         self.send_command(0x24)
         for i in range(0, int(self.width * self.height / 8)):
-            self.send_data(0xff)
+            self.send_data(0xFF)
 
         self.send_command(0x26)
         for i in range(0, int(self.width * self.height / 8)):
@@ -203,4 +203,6 @@ class EPD:
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
+
 ### END OF FILE ###

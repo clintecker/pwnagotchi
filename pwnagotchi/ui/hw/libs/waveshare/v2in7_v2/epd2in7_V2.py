@@ -34,7 +34,7 @@ from .. import epdconfig
 EPD_WIDTH = 176
 EPD_HEIGHT = 264
 
-GRAY1 = 0xff  # white
+GRAY1 = 0xFF  # white
 GRAY2 = 0xC0
 GRAY3 = 0x80  # gray
 GRAY4 = 0x00  # Blackest
@@ -56,25 +56,165 @@ class EPD:
         self.GRAY4 = GRAY4  # Blackest
 
     LUT_DATA_4Gray = [
-        0x40, 0x48, 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x8, 0x48, 0x10, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x2, 0x48, 0x4, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x20, 0x48, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0xA, 0x19, 0x0, 0x3, 0x8, 0x0, 0x0,
-        0x14, 0x1, 0x0, 0x14, 0x1, 0x0, 0x3,
-        0xA, 0x3, 0x0, 0x8, 0x19, 0x0, 0x0,
-        0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x0, 0x0, 0x0,
-        0x22, 0x17, 0x41, 0x0, 0x32, 0x1C,
+        0x40,
+        0x48,
+        0x80,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x8,
+        0x48,
+        0x10,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x2,
+        0x48,
+        0x4,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x20,
+        0x48,
+        0x1,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0xA,
+        0x19,
+        0x0,
+        0x3,
+        0x8,
+        0x0,
+        0x0,
+        0x14,
+        0x1,
+        0x0,
+        0x14,
+        0x1,
+        0x0,
+        0x3,
+        0xA,
+        0x3,
+        0x0,
+        0x8,
+        0x19,
+        0x0,
+        0x0,
+        0x1,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x1,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x22,
+        0x22,
+        0x22,
+        0x22,
+        0x22,
+        0x22,
+        0x0,
+        0x0,
+        0x0,
+        0x22,
+        0x17,
+        0x41,
+        0x0,
+        0x32,
+        0x1C,
     ]
 
     # Hardware reset
@@ -100,7 +240,7 @@ class EPD:
 
     def ReadBusy(self):
         logger.debug("e-Paper busy")
-        while (epdconfig.digital_read(self.busy_pin) == 1):  # 1: idle, 0: busy
+        while epdconfig.digital_read(self.busy_pin) == 1:  # 1: idle, 0: busy
             epdconfig.delay_ms(20)
         logger.debug("e-Paper busy release")
 
@@ -134,7 +274,7 @@ class EPD:
             self.send_data(self.LUT_DATA_4Gray[i])
 
     def init(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
 
         # EPD hardware init start
@@ -159,7 +299,7 @@ class EPD:
         return 0
 
     def init_Fast(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
 
         # EPD hardware init start
@@ -204,12 +344,12 @@ class EPD:
         return 0
 
     def Init_4Gray(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
         self.reset()
 
         self.send_command(0x12)  # soft reset
-        self.ReadBusy();
+        self.ReadBusy()
 
         self.send_command(0x74)  # set analog block control
         self.send_data(0x54)
@@ -264,18 +404,18 @@ class EPD:
     def getbuffer(self, image):
         # logger.debug("bufsiz = ",int(self.width/8) * self.height)
         buf = [0xFF] * (int(self.width / 8) * self.height)
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
         # logger.debug("imwidth = %d, imheight = %d",imwidth,imheight)
-        if (imwidth == self.width and imheight == self.height):
+        if imwidth == self.width and imheight == self.height:
             logger.debug("Vertical")
             for y in range(imheight):
                 for x in range(imwidth):
                     # Set the bits for the column of pixels at the current position.
                     if pixels[x, y] == 0:
                         buf[int((x + y * self.width) / 8)] &= ~(0x80 >> (x % 8))
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             logger.debug("Horizontal")
             for y in range(imheight):
                 for x in range(imwidth):
@@ -288,45 +428,51 @@ class EPD:
     def getbuffer_4Gray(self, image):
         # logger.debug("bufsiz = ",int(self.width/8) * self.height)
         buf = [0xFF] * (int(self.width / 4) * self.height)
-        image_monocolor = image.convert('L')
+        image_monocolor = image.convert("L")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
         i = 0
         # logger.debug("imwidth = %d, imheight = %d",imwidth,imheight)
-        if (imwidth == self.width and imheight == self.height):
+        if imwidth == self.width and imheight == self.height:
             logger.debug("Vertical")
             for y in range(imheight):
                 for x in range(imwidth):
                     # Set the bits for the column of pixels at the current position.
-                    if (pixels[x, y] == 0xC0):
+                    if pixels[x, y] == 0xC0:
                         pixels[x, y] = 0x80
-                    elif (pixels[x, y] == 0x80):
+                    elif pixels[x, y] == 0x80:
                         pixels[x, y] = 0x40
                     i = i + 1
-                    if (i % 4 == 0):
+                    if i % 4 == 0:
                         buf[int((x + (y * self.width)) / 4)] = (
-                                    (pixels[x - 3, y] & 0xc0) | (pixels[x - 2, y] & 0xc0) >> 2 | (
-                                        pixels[x - 1, y] & 0xc0) >> 4 | (pixels[x, y] & 0xc0) >> 6)
+                            (pixels[x - 3, y] & 0xC0)
+                            | (pixels[x - 2, y] & 0xC0) >> 2
+                            | (pixels[x - 1, y] & 0xC0) >> 4
+                            | (pixels[x, y] & 0xC0) >> 6
+                        )
 
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             logger.debug("Horizontal")
             for x in range(imwidth):
                 for y in range(imheight):
                     newx = y
                     newy = self.height - x - 1
-                    if (pixels[x, y] == 0xC0):
+                    if pixels[x, y] == 0xC0:
                         pixels[x, y] = 0x80
-                    elif (pixels[x, y] == 0x80):
+                    elif pixels[x, y] == 0x80:
                         pixels[x, y] = 0x40
                     i = i + 1
-                    if (i % 4 == 0):
+                    if i % 4 == 0:
                         buf[int((newx + (newy * self.width)) / 4)] = (
-                                    (pixels[x, y - 3] & 0xc0) | (pixels[x, y - 2] & 0xc0) >> 2 | (
-                                        pixels[x, y - 1] & 0xc0) >> 4 | (pixels[x, y] & 0xc0) >> 6)
+                            (pixels[x, y - 3] & 0xC0)
+                            | (pixels[x, y - 2] & 0xC0) >> 2
+                            | (pixels[x, y - 1] & 0xC0) >> 4
+                            | (pixels[x, y] & 0xC0) >> 6
+                        )
         return buf
 
     def Clear(self):
-        if (self.width % 8 == 0):
+        if self.width % 8 == 0:
             Width = self.width // 8
         else:
             Width = self.width // 8 + 1
@@ -334,11 +480,11 @@ class EPD:
         self.send_command(0x24)
         for j in range(Height):
             for i in range(Width):
-                self.send_data(0XFF)
+                self.send_data(0xFF)
         self.TurnOnDisplay()
 
     def display(self, image):
-        if (self.width % 8 == 0):
+        if self.width % 8 == 0:
             Width = self.width // 8
         else:
             Width = self.width // 8 + 1
@@ -350,7 +496,7 @@ class EPD:
         self.TurnOnDisplay()
 
     def display_Fast(self, image):
-        if (self.width % 8 == 0):
+        if self.width % 8 == 0:
             Width = self.width // 8
         else:
             Width = self.width // 8 + 1
@@ -362,7 +508,7 @@ class EPD:
         self.TurnOnDisplay_Fast()
 
     def display_Base(self, image):
-        if (self.width % 8 == 0):
+        if self.width % 8 == 0:
             Width = self.width // 8
         else:
             Width = self.width // 8 + 1
@@ -379,7 +525,7 @@ class EPD:
         self.TurnOnDisplay()
 
     def display_Base_color(self, color):
-        if (self.width % 8 == 0):
+        if self.width % 8 == 0:
             Width = self.width // 8
         else:
             Width = self.width // 8 + 1
@@ -396,8 +542,11 @@ class EPD:
         # self.TurnOnDisplay()
 
     def display_Partial(self, Image, Xstart, Ystart, Xend, Yend):
-        if ((Xstart % 8 + Xend % 8 == 8 & Xstart % 8 > Xend % 8) | Xstart % 8 + Xend % 8 == 0 | (
-                Xend - Xstart) % 8 == 0):
+        if (
+            (Xstart % 8 + Xend % 8 == 8 & Xstart % 8 > Xend % 8) | Xstart % 8 + Xend % 8
+            == 0 | (Xend - Xstart) % 8
+            == 0
+        ):
             Xstart = Xstart // 8
             Xend = Xend // 8
         else:
@@ -407,7 +556,7 @@ class EPD:
             else:
                 Xend = Xend // 8 + 1
 
-        if (self.width % 8 == 0):
+        if self.width % 8 == 0:
             Width = self.width // 8
         else:
             Width = self.width // 8 + 1
@@ -423,24 +572,29 @@ class EPD:
         self.send_data(0x80)
 
         self.send_command(0x44)  # set RAM x address start/end, in page 35
-        self.send_data(Xstart & 0xff)  # RAM x address start at 00h;
-        self.send_data(Xend & 0xff)  # RAM x address end at 0fh(15+1)*8->128
+        self.send_data(Xstart & 0xFF)  # RAM x address start at 00h;
+        self.send_data(Xend & 0xFF)  # RAM x address end at 0fh(15+1)*8->128
         self.send_command(0x45)  # set RAM y address start/end, in page 35
-        self.send_data(Ystart & 0xff)  # RAM y address start at 0127h;
+        self.send_data(Ystart & 0xFF)  # RAM y address start at 0127h;
         self.send_data((Ystart >> 8) & 0x01)  # RAM y address start at 0127h;
-        self.send_data(Yend & 0xff)  # RAM y address end at 00h;
+        self.send_data(Yend & 0xFF)  # RAM y address end at 00h;
         self.send_data((Yend >> 8) & 0x01)
 
         self.send_command(0x4E)  # set RAM x address count to 0;
-        self.send_data(Xstart & 0xff)
+        self.send_data(Xstart & 0xFF)
         self.send_command(0x4F)  # set RAM y address count to 0X127;
-        self.send_data(Ystart & 0xff)
+        self.send_data(Ystart & 0xFF)
         self.send_data((Ystart >> 8) & 0x01)
 
         self.send_command(0x24)  # Write Black and White image to RAM
         for j in range(Height):
             for i in range(Width):
-                if ((j > Ystart - 1) & (j < (Yend + 1)) & (i > Xstart - 1) & (i < (Xend + 1))):
+                if (
+                    (j > Ystart - 1)
+                    & (j < (Yend + 1))
+                    & (i > Xstart - 1)
+                    & (i < (Xend + 1))
+                ):
                     self.send_data(Image[i + j * Width])
         self.TurnOnDisplay_Partial()
 
@@ -452,11 +606,11 @@ class EPD:
                 temp1 = image[i * 2 + j]
                 for k in range(0, 2):
                     temp2 = temp1 & 0xC0
-                    if (temp2 == 0xC0):
+                    if temp2 == 0xC0:
                         temp3 |= 0x00
-                    elif (temp2 == 0x00):
+                    elif temp2 == 0x00:
                         temp3 |= 0x01
-                    elif (temp2 == 0x80):
+                    elif temp2 == 0x80:
                         temp3 |= 0x01
                     else:  # 0x40
                         temp3 |= 0x00
@@ -464,15 +618,15 @@ class EPD:
 
                     temp1 <<= 2
                     temp2 = temp1 & 0xC0
-                    if (temp2 == 0xC0):
+                    if temp2 == 0xC0:
                         temp3 |= 0x00
-                    elif (temp2 == 0x00):
+                    elif temp2 == 0x00:
                         temp3 |= 0x01
-                    elif (temp2 == 0x80):
+                    elif temp2 == 0x80:
                         temp3 |= 0x01
                     else:  # 0x40
                         temp3 |= 0x00
-                    if (j != 1 or k != 1):
+                    if j != 1 or k != 1:
                         temp3 <<= 1
                     temp1 <<= 2
             self.send_data(temp3)
@@ -484,11 +638,11 @@ class EPD:
                 temp1 = image[i * 2 + j]
                 for k in range(0, 2):
                     temp2 = temp1 & 0xC0
-                    if (temp2 == 0xC0):
+                    if temp2 == 0xC0:
                         temp3 |= 0x00
-                    elif (temp2 == 0x00):
+                    elif temp2 == 0x00:
                         temp3 |= 0x01
-                    elif (temp2 == 0x80):
+                    elif temp2 == 0x80:
                         temp3 |= 0x00
                     else:  # 0x40
                         temp3 |= 0x01
@@ -496,15 +650,15 @@ class EPD:
 
                     temp1 <<= 2
                     temp2 = temp1 & 0xC0
-                    if (temp2 == 0xC0):
+                    if temp2 == 0xC0:
                         temp3 |= 0x00
-                    elif (temp2 == 0x00):
+                    elif temp2 == 0x00:
                         temp3 |= 0x01
-                    elif (temp2 == 0x80):
+                    elif temp2 == 0x80:
                         temp3 |= 0x00
                     else:  # 0x40
                         temp3 |= 0x01
-                    if (j != 1 or k != 1):
+                    if j != 1 or k != 1:
                         temp3 <<= 1
                     temp1 <<= 2
             self.send_data(temp3)
@@ -512,7 +666,7 @@ class EPD:
         self.TurnOnDisplay_4GRAY()
 
     def sleep(self):
-        self.send_command(0X10)
+        self.send_command(0x10)
         self.send_data(0x01)
 
         epdconfig.delay_ms(2000)

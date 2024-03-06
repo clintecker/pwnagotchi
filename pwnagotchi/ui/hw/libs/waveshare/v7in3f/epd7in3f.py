@@ -51,12 +51,12 @@ class EPD:
         self.width = EPD_WIDTH
         self.height = EPD_HEIGHT
         self.BLACK = 0x000000  # 0000  BGR
-        self.WHITE = 0xffffff  # 0001
-        self.GREEN = 0x00ff00  # 0010
-        self.BLUE = 0xff0000  # 0011
-        self.RED = 0x0000ff  # 0100
-        self.YELLOW = 0x00ffff  # 0101
-        self.ORANGE = 0x0080ff  # 0110
+        self.WHITE = 0xFFFFFF  # 0001
+        self.GREEN = 0x00FF00  # 0010
+        self.BLUE = 0xFF0000  # 0011
+        self.RED = 0x0000FF  # 0100
+        self.YELLOW = 0x00FFFF  # 0101
+        self.ORANGE = 0x0080FF  # 0110
 
     # Hardware reset
     def reset(self):
@@ -88,7 +88,7 @@ class EPD:
 
     def ReadBusyH(self):
         logger.debug("e-Paper busy H")
-        while (epdconfig.digital_read(self.busy_pin) == 0):  # 0: busy, 1: idle
+        while epdconfig.digital_read(self.busy_pin) == 0:  # 0: busy, 1: idle
             epdconfig.delay_ms(5)
         logger.debug("e-Paper busy H release")
 
@@ -97,15 +97,15 @@ class EPD:
         self.ReadBusyH()
 
         self.send_command(0x12)  # DISPLAY_REFRESH
-        self.send_data(0X00)
+        self.send_data(0x00)
         self.ReadBusyH()
 
         self.send_command(0x02)  # POWER_OFF
-        self.send_data(0X00)
+        self.send_data(0x00)
         self.ReadBusyH()
 
     def init(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
         # EPD hardware init start
         self.reset()
@@ -202,21 +202,47 @@ class EPD:
         # Create a pallette with the 7 colors supported by the panel
         pal_image = Image.new("P", (1, 1))
         pal_image.putpalette(
-            (0, 0, 0, 255, 255, 255, 0, 255, 0, 0, 0, 255, 255, 0, 0, 255, 255, 0, 255, 128, 0) + (0, 0, 0) * 249)
+            (
+                0,
+                0,
+                0,
+                255,
+                255,
+                255,
+                0,
+                255,
+                0,
+                0,
+                0,
+                255,
+                255,
+                0,
+                0,
+                255,
+                255,
+                0,
+                255,
+                128,
+                0,
+            )
+            + (0, 0, 0) * 249
+        )
 
         # Check if we need to rotate the image
         imwidth, imheight = image.size
-        if (imwidth == self.width and imheight == self.height):
+        if imwidth == self.width and imheight == self.height:
             image_temp = image
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             image_temp = image.rotate(90, expand=True)
         else:
             logger.warning(
-                "Invalid image dimensions: %d x %d, expected %d x %d" % (imwidth, imheight, self.width, self.height))
+                "Invalid image dimensions: %d x %d, expected %d x %d"
+                % (imwidth, imheight, self.width, self.height)
+            )
 
         # Convert the soruce image to the 7 colors, dithering if needed
         image_7color = image_temp.convert("RGB").quantize(palette=pal_image)
-        buf_7color = bytearray(image_7color.tobytes('raw'))
+        buf_7color = bytearray(image_7color.tobytes("raw"))
 
         # PIL does not support 4 bit color, so pack the 4 bits of color
         # into a single byte to transfer to the panel
@@ -242,8 +268,10 @@ class EPD:
 
     def sleep(self):
         self.send_command(0x07)  # DEEP_SLEEP
-        self.send_data(0XA5)
+        self.send_data(0xA5)
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
+
 ### END OF FILE ###

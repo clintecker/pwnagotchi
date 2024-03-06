@@ -34,7 +34,7 @@ from .. import epdconfig
 EPD_WIDTH = 280
 EPD_HEIGHT = 480
 
-GRAY1 = 0xff  # white
+GRAY1 = 0xFF  # white
 GRAY2 = 0xC0  # Close to white
 GRAY3 = 0x80  # Close to black
 GRAY4 = 0x00  # black
@@ -56,59 +56,435 @@ class EPD:
         self.GRAY4 = GRAY4  # Blackest
 
     lut_4Gray_GC = [
-        0x2A, 0x06, 0x15, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x28, 0x06, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x20, 0x06, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x14, 0x06, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x02, 0x02, 0x0A, 0x00, 0x00, 0x00, 0x08, 0x08, 0x02,
-        0x00, 0x02, 0x02, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x22, 0x22, 0x22, 0x22, 0x22
+        0x2A,
+        0x06,
+        0x15,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x28,
+        0x06,
+        0x14,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x20,
+        0x06,
+        0x10,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x14,
+        0x06,
+        0x28,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x02,
+        0x02,
+        0x0A,
+        0x00,
+        0x00,
+        0x00,
+        0x08,
+        0x08,
+        0x02,
+        0x00,
+        0x02,
+        0x02,
+        0x0A,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x22,
+        0x22,
+        0x22,
+        0x22,
+        0x22,
     ]
 
     lut_1Gray_GC = [
-        0x2A, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x05, 0x2A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x2A, 0x15, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x05, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x02, 0x03, 0x0A, 0x00, 0x02, 0x06, 0x0A, 0x05, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x22, 0x22, 0x22, 0x22, 0x22
+        0x2A,
+        0x05,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x05,
+        0x2A,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x2A,
+        0x15,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x05,
+        0x0A,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x02,
+        0x03,
+        0x0A,
+        0x00,
+        0x02,
+        0x06,
+        0x0A,
+        0x05,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x22,
+        0x22,
+        0x22,
+        0x22,
+        0x22,
     ]
 
     lut_1Gray_DU = [
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x01, 0x2A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x0A, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x05, 0x05, 0x00, 0x05, 0x03, 0x05, 0x05, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x22, 0x22, 0x22, 0x22, 0x22
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x01,
+        0x2A,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x0A,
+        0x55,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x05,
+        0x05,
+        0x00,
+        0x05,
+        0x03,
+        0x05,
+        0x05,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x22,
+        0x22,
+        0x22,
+        0x22,
+        0x22,
     ]
 
     lut_1Gray_A2 = [
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x03, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x22, 0x22, 0x22, 0x22, 0x22
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x0A,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x05,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x03,
+        0x05,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x22,
+        0x22,
+        0x22,
+        0x22,
+        0x22,
     ]
 
     # Hardware reset
@@ -141,12 +517,12 @@ class EPD:
 
     def ReadBusy(self):
         logger.debug("e-Paper busy")
-        while (epdconfig.digital_read(self.busy_pin) == 1):  # 0: idle, 1: busy
+        while epdconfig.digital_read(self.busy_pin) == 1:  # 0: idle, 1: busy
             epdconfig.delay_ms(10)
         logger.debug("e-Paper busy release")
 
     def init(self, mode):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
         # EPD hardware init start
         self.reset()
@@ -193,8 +569,10 @@ class EPD:
         self.send_command(0x2C)  # set vcom value
         self.send_data(0x44)
 
-        if (mode == 0):  # 4Gray
-            self.send_command(0x37)  # set display option, these setting turn on previous function
+        if mode == 0:  # 4Gray
+            self.send_command(
+                0x37
+            )  # set display option, these setting turn on previous function
             self.send_data(0x00)
             self.send_data(0x00)
             self.send_data(0x00)
@@ -205,8 +583,10 @@ class EPD:
             self.send_data(0x00)
             self.send_data(0x00)
             self.send_data(0x00)
-        elif (mode == 1):  # 1Gray
-            self.send_command(0x37)  # set display option, these setting turn on previous function
+        elif mode == 1:  # 1Gray
+            self.send_command(
+                0x37
+            )  # set display option, these setting turn on previous function
             self.send_data(0x00)  # can switch 1 gray or 4 gray
             self.send_data(0xFF)
             self.send_data(0xFF)
@@ -243,18 +623,18 @@ class EPD:
     def getbuffer(self, image):
         # logger.debug("bufsiz = ",int(self.width/8) * self.height)
         buf = [0xFF] * (int(self.width / 8) * self.height)
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
         # logger.debug("imwidth = %d, imheight = %d",imwidth,imheight)
-        if (imwidth == self.width and imheight == self.height):
+        if imwidth == self.width and imheight == self.height:
             logger.debug("Vertical")
             for y in range(imheight):
                 for x in range(imwidth):
                     # Set the bits for the column of pixels at the current position.
                     if pixels[x, y] == 0:
                         buf[int((x + y * self.width) / 8)] &= ~(0x80 >> (x % 8))
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             logger.debug("Horizontal")
             for y in range(imheight):
                 for x in range(imwidth):
@@ -267,45 +647,51 @@ class EPD:
     def getbuffer_4Gray(self, image):
         # logger.debug("bufsiz = ",int(self.width/8) * self.height)
         buf = [0xFF] * (int(self.width / 4) * self.height)
-        image_monocolor = image.convert('L')
+        image_monocolor = image.convert("L")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
         i = 0
         # logger.debug("imwidth = %d, imheight = %d",imwidth,imheight)
-        if (imwidth == self.width and imheight == self.height):
+        if imwidth == self.width and imheight == self.height:
             logger.debug("Vertical")
             for y in range(imheight):
                 for x in range(imwidth):
                     # Set the bits for the column of pixels at the current position.
-                    if (pixels[x, y] == 0xC0):
+                    if pixels[x, y] == 0xC0:
                         pixels[x, y] = 0x80
-                    elif (pixels[x, y] == 0x80):
+                    elif pixels[x, y] == 0x80:
                         pixels[x, y] = 0x40
                     i = i + 1
-                    if (i % 4 == 0):
+                    if i % 4 == 0:
                         buf[int((x + (y * self.width)) / 4)] = (
-                                    (pixels[x - 3, y] & 0xc0) | (pixels[x - 2, y] & 0xc0) >> 2 | (
-                                        pixels[x - 1, y] & 0xc0) >> 4 | (pixels[x, y] & 0xc0) >> 6)
+                            (pixels[x - 3, y] & 0xC0)
+                            | (pixels[x - 2, y] & 0xC0) >> 2
+                            | (pixels[x - 1, y] & 0xC0) >> 4
+                            | (pixels[x, y] & 0xC0) >> 6
+                        )
 
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             logger.debug("Horizontal")
             for x in range(imwidth):
                 for y in range(imheight):
                     newx = y
                     newy = imwidth - x - 1
-                    if (pixels[x, y] == 0xC0):
+                    if pixels[x, y] == 0xC0:
                         pixels[x, y] = 0x80
-                    elif (pixels[x, y] == 0x80):
+                    elif pixels[x, y] == 0x80:
                         pixels[x, y] = 0x40
                     i = i + 1
-                    if (i % 4 == 0):
+                    if i % 4 == 0:
                         buf[int((newx + (newy * self.width)) / 4)] = (
-                                    (pixels[x, y - 3] & 0xc0) | (pixels[x, y - 2] & 0xc0) >> 2 | (
-                                        pixels[x, y - 1] & 0xc0) >> 4 | (pixels[x, y] & 0xc0) >> 6)
+                            (pixels[x, y - 3] & 0xC0)
+                            | (pixels[x, y - 2] & 0xC0) >> 2
+                            | (pixels[x, y - 1] & 0xC0) >> 4
+                            | (pixels[x, y] & 0xC0) >> 6
+                        )
         return buf
 
     def display_4Gray(self, image):
-        if (image == None):
+        if image == None:
             return
 
         self.send_command(0x4E)
@@ -329,26 +715,26 @@ class EPD:
                 temp1 = image[i * 2 + j]
                 for k in range(0, 2):
                     temp2 = temp1 & 0xC0
-                    if (temp2 == 0xC0):
+                    if temp2 == 0xC0:
                         temp3 |= 0x01  # white
-                    elif (temp2 == 0x00):
+                    elif temp2 == 0x00:
                         temp3 |= 0x00  # black
-                    elif (temp2 == 0x80):
+                    elif temp2 == 0x80:
                         temp3 |= 0x00  # gray1
                     else:  # 0x40
                         temp3 |= 0x01  # gray2
                     temp3 <<= 1
                     temp1 <<= 2
                     temp2 = temp1 & 0xC0
-                    if (temp2 == 0xC0):  # white
+                    if temp2 == 0xC0:  # white
                         temp3 |= 0x01
-                    elif (temp2 == 0x00):  # black
+                    elif temp2 == 0x00:  # black
                         temp3 |= 0x00
-                    elif (temp2 == 0x80):
+                    elif temp2 == 0x80:
                         temp3 |= 0x00  # gray1
                     else:  # 0x40
                         temp3 |= 0x01  # gray2
-                    if (j != 1 or k != 1):
+                    if j != 1 or k != 1:
                         temp3 <<= 1
                     temp1 <<= 2
             buf[i] = temp3
@@ -368,26 +754,26 @@ class EPD:
                 temp1 = image[i * 2 + j]
                 for k in range(0, 2):
                     temp2 = temp1 & 0xC0
-                    if (temp2 == 0xC0):
+                    if temp2 == 0xC0:
                         temp3 |= 0x01  # white
-                    elif (temp2 == 0x00):
+                    elif temp2 == 0x00:
                         temp3 |= 0x00  # black
-                    elif (temp2 == 0x80):
+                    elif temp2 == 0x80:
                         temp3 |= 0x01  # gray1
                     else:  # 0x40
                         temp3 |= 0x00  # gray2
                     temp3 <<= 1
                     temp1 <<= 2
                     temp2 = temp1 & 0xC0
-                    if (temp2 == 0xC0):  # white
+                    if temp2 == 0xC0:  # white
                         temp3 |= 0x01
-                    elif (temp2 == 0x00):  # black
+                    elif temp2 == 0x00:  # black
                         temp3 |= 0x00
-                    elif (temp2 == 0x80):
+                    elif temp2 == 0x80:
                         temp3 |= 0x01  # gray1
                     else:  # 0x40
                         temp3 |= 0x00  # gray2
-                    if (j != 1 or k != 1):
+                    if j != 1 or k != 1:
                         temp3 <<= 1
                     temp1 <<= 2
             buf[i] = temp3
@@ -400,7 +786,7 @@ class EPD:
         self.ReadBusy()
 
     def display_1Gray(self, image):
-        if (image == None):
+        if image == None:
             return
 
         self.send_command(0x4E)
@@ -431,16 +817,16 @@ class EPD:
             linewidth = int(self.width / 8) + 1
 
         self.send_command(0x24)
-        self.send_data2([0xff] * int(self.height * linewidth))
+        self.send_data2([0xFF] * int(self.height * linewidth))
 
-        if (mode == 0):  # 4Gray
+        if mode == 0:  # 4Gray
             self.send_command(0x26)
-            self.send_data2([0xff] * int(self.height * linewidth))
+            self.send_data2([0xFF] * int(self.height * linewidth))
 
             self.load_lut(self.lut_4Gray_GC)
             self.send_command(0x22)
             self.send_data(0xC7)
-        elif (mode == 1):  # 1Gray
+        elif mode == 1:  # 1Gray
             self.load_lut(self.lut_1Gray_DU)
         else:
             logger.debug("There is no such mode")
@@ -449,10 +835,11 @@ class EPD:
         self.ReadBusy()
 
     def sleep(self):
-        self.send_command(0X10)  # deep sleep
+        self.send_command(0x10)  # deep sleep
         self.send_data(0x03)
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
 
 ### END OF FILE ###

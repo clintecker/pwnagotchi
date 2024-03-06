@@ -29,7 +29,7 @@ source "arm" "rpi32-pwnagotchi" {
   qemu_binary_source_path       = "/usr/libexec/qemu-binfmt/arm-binfmt-P"
   qemu_binary_destination_path  = "/usr/libexec/qemu-binfmt/arm-binfmt-P"
   image_build_method            = "resize"
-  image_size                    = "9G"
+  image_size                    = "15G"
   image_type                    = "dos"
   image_partitions {
     name         = "boot"
@@ -51,6 +51,16 @@ source "arm" "rpi32-pwnagotchi" {
 build {
   name = "Raspberry Pi 32 Pwnagotchi"
   sources = ["source.arm.rpi32-pwnagotchi"]
+  
+  provisioner "shell" {
+    inline = [
+      "sed -i '/en_US.UTF-8/s/^#//g' /etc/locale.gen", // Uncomment the en_US.UTF-8 line
+      "locale-gen", // Generate the locale
+      "update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8", // Set the default system locale
+      "timedatectl set-timezone UTC", // Set the timezone to UTC
+    ]
+  }
+  
   provisioner "file" {
     destination = "/usr/bin/"
     sources     = [
@@ -63,12 +73,14 @@ build {
       "data/32bit/usr/bin/pwnlib",
     ]
   }
+
   provisioner "shell" {
     inline = ["chmod +x /usr/bin/*"]
   }
 
   provisioner "file" {
     destination = "/etc/systemd/system/"
+    
     sources     = [
       "data/32bit/etc/systemd/system/bettercap.service",
       "data/32bit/etc/systemd/system/pwnagotchi.service",
@@ -85,6 +97,13 @@ build {
   provisioner "shell" {
     inline = ["apt-get -y --allow-releaseinfo-change update", "apt-get -y dist-upgrade", "apt-get install -y --no-install-recommends ansible"]
   }
+  
+
+  provisioner "file" {
+    source      = "../../pwnagotchi"
+    destination = "/usr/local/src/pwnagotchi"
+  }
+
   provisioner "ansible-local" {
     command         = "ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 PWN_VERSION=${var.pwn_version} PWN_HOSTNAME=${var.pwn_hostname} ansible-playbook"
     extra_arguments = ["--extra-vars \"ansible_python_interpreter=/usr/bin/python3\""]

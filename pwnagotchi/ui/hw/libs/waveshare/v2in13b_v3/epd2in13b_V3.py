@@ -84,15 +84,17 @@ class EPD:
         self.ReadBusy()  # waiting for the electronic paper IC to release the idle signal
 
         self.send_command(0x00)  # panel setting
-        self.send_data(0x0f)  # LUT from OTP,128x296
-        self.send_data(0x89)  # Temperature sensor, boost and other related timing settings
+        self.send_data(0x0F)  # LUT from OTP,128x296
+        self.send_data(
+            0x89
+        )  # Temperature sensor, boost and other related timing settings
 
         self.send_command(0x61)  # resolution setting
         self.send_data(0x68)
         self.send_data(0x00)
         self.send_data(0xD4)
 
-        self.send_command(0X50)  # VCOM AND DATA INTERVAL SETTING
+        self.send_command(0x50)  # VCOM AND DATA INTERVAL SETTING
         self.send_data(0x77)  # WBmode:VBDF 17|D7 VBDW 97 VBDB 57
         # WBRmode:VBDF F7 VBDW 77 VBDB 37  VBDR B7
 
@@ -101,7 +103,7 @@ class EPD:
     def getbuffer(self, image):
         # logger.debug("bufsiz = ",int(self.width/8) * self.height)
         buf = [0xFF] * (int(self.width / 8) * self.height)
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
         # logger.debug("imwidth = %d, imheight = %d",imwidth,imheight)
@@ -149,13 +151,15 @@ class EPD:
         self.ReadBusy()
 
     def sleep(self):
-        self.send_command(0X50)
-        self.send_data(0xf7)
-        self.send_command(0X02)
+        self.send_command(0x50)
+        self.send_data(0xF7)
+        self.send_command(0x02)
         self.ReadBusy()
         self.send_command(0x07)  # DEEP_SLEEP
         self.send_data(0xA5)  # check code
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
+
 # END OF FILE ###

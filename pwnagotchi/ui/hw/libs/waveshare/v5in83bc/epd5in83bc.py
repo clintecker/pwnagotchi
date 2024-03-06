@@ -70,12 +70,12 @@ class EPD:
 
     def ReadBusy(self):
         logger.debug("e-Paper busy")
-        while (epdconfig.digital_read(self.busy_pin) == 0):  # 0: idle, 1: busy
+        while epdconfig.digital_read(self.busy_pin) == 0:  # 0: idle, 1: busy
             epdconfig.delay_ms(100)
         logger.debug("e-Paper busy release")
 
     def init(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
 
         self.reset()
@@ -90,30 +90,30 @@ class EPD:
 
         self.send_command(0x30)  # PLL_CONTROL
         self.send_data(0x3A)  # PLL:  0-15:0x3C, 15+:0x3A
-        self.send_command(0X82)  # VCOM VOLTAGE SETTING
+        self.send_command(0x82)  # VCOM VOLTAGE SETTING
         self.send_data(0x28)  # all temperature  range
 
         self.send_command(0x06)  # boost
-        self.send_data(0xc7)
-        self.send_data(0xcc)
+        self.send_data(0xC7)
+        self.send_data(0xCC)
         self.send_data(0x15)
 
-        self.send_command(0X50)  # VCOM AND DATA INTERVAL SETTING
+        self.send_command(0x50)  # VCOM AND DATA INTERVAL SETTING
         self.send_data(0x77)
 
-        self.send_command(0X60)  # TCON SETTING
+        self.send_command(0x60)  # TCON SETTING
         self.send_data(0x22)
 
-        self.send_command(0X65)  # FLASH CONTROL
+        self.send_command(0x65)  # FLASH CONTROL
         self.send_data(0x00)
 
         self.send_command(0x61)  # tres
         self.send_data(0x02)  # source 600
         self.send_data(0x58)
         self.send_data(0x01)  # gate 448
-        self.send_data(0xc0)
+        self.send_data(0xC0)
 
-        self.send_command(0xe5)  # FLASH MODE
+        self.send_command(0xE5)  # FLASH MODE
         self.send_data(0x03)
         self.send_data(0x03)
 
@@ -122,18 +122,18 @@ class EPD:
     def getbuffer(self, image):
         # logger.debug("bufsiz = ",int(self.width/8) * self.height)
         buf = [0xFF] * (int(self.width / 8) * self.height)
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
-        logger.debug('imwidth = %d  imheight =  %d ', imwidth, imheight)
-        if (imwidth == self.width and imheight == self.height):
+        logger.debug("imwidth = %d  imheight =  %d ", imwidth, imheight)
+        if imwidth == self.width and imheight == self.height:
             logger.debug("Horizontal")
             for y in range(imheight):
                 for x in range(imwidth):
                     # Set the bits for the column of pixels at the current position.
                     if pixels[x, y] == 0:
                         buf[int((x + y * self.width) / 8)] &= ~(0x80 >> (x % 8))
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             logger.debug("Vertical")
             for y in range(imheight):
                 for x in range(imwidth):
@@ -149,10 +149,10 @@ class EPD:
             temp1 = imageblack[i]
             temp2 = imagered[i]
             j = 0
-            while (j < 8):
-                if ((temp2 & 0x80) == 0x00):
+            while j < 8:
+                if (temp2 & 0x80) == 0x00:
                     temp3 = 0x04  # red
-                elif ((temp1 & 0x80) == 0x00):
+                elif (temp1 & 0x80) == 0x00:
                     temp3 = 0x00  # black
                 else:
                     temp3 = 0x03  # white
@@ -161,9 +161,9 @@ class EPD:
                 temp1 = (temp1 << 1) & 0xFF
                 temp2 = (temp2 << 1) & 0xFF
                 j += 1
-                if ((temp2 & 0x80) == 0x00):
+                if (temp2 & 0x80) == 0x00:
                     temp3 |= 0x04  # red
-                elif ((temp1 & 0x80) == 0x00):
+                elif (temp1 & 0x80) == 0x00:
                     temp3 |= 0x00  # black
                 else:
                     temp3 |= 0x03  # white
@@ -200,4 +200,6 @@ class EPD:
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
+
 ### END OF FILE ###

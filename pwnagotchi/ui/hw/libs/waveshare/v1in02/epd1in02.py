@@ -50,44 +50,184 @@ class EPD:
     # full screen update LUT
 
     lut_w1 = [
-        0x60, 0x5A, 0x5A, 0x00, 0x00, 0x01,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x60,
+        0x5A,
+        0x5A,
+        0x00,
+        0x00,
+        0x01,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
     ]
 
     lut_b1 = [
-        0x90, 0x5A, 0x5A, 0x00, 0x00, 0x01,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x90,
+        0x5A,
+        0x5A,
+        0x00,
+        0x00,
+        0x01,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
     ]
 
     # partial screen update LUT
     lut_w = [
-        0x60, 0x01, 0x01, 0x00, 0x00, 0x01,
-        0x80, 0x1f, 0x00, 0x00, 0x00, 0x01,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x60,
+        0x01,
+        0x01,
+        0x00,
+        0x00,
+        0x01,
+        0x80,
+        0x1F,
+        0x00,
+        0x00,
+        0x00,
+        0x01,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
     ]
 
     lut_b = [
-        0x90, 0x01, 0x01, 0x00, 0x00, 0x01,
-        0x40, 0x1f, 0x00, 0x00, 0x00, 0x01,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x90,
+        0x01,
+        0x01,
+        0x00,
+        0x00,
+        0x01,
+        0x40,
+        0x1F,
+        0x00,
+        0x00,
+        0x00,
+        0x01,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
     ]
 
     # Hardware reset
@@ -116,7 +256,7 @@ class EPD:
         self.send_command(0x71)
         busy = epdconfig.digital_read(self.busy_pin)
         busy = not (busy & 0x01)
-        while (busy):
+        while busy:
             self.send_command(0x71)
             busy = epdconfig.digital_read(self.busy_pin)
             busy = not (busy & 0x01)
@@ -147,7 +287,7 @@ class EPD:
             self.send_data(self.lut_b[count])
 
     def Init(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
         # EPD hardware init start
         self.reset()
@@ -161,11 +301,11 @@ class EPD:
         self.send_command(0x01)  # power setting
         self.send_data(0x03)
         self.send_data(0x00)
-        self.send_data(0x2b)
-        self.send_data(0x2b)
+        self.send_data(0x2B)
+        self.send_data(0x2B)
 
         self.send_command(0x06)  # Configuring the charge pump
-        self.send_data(0x3f)
+        self.send_data(0x3F)
 
         self.send_command(0x2A)  # Setting XON and the options of LUT
         self.send_data(0x00)
@@ -187,7 +327,7 @@ class EPD:
         self.send_command(0x82)  # sets VCOM_DC value
         self.send_data(0x12)  # -1v
 
-        self.send_command(0xe3)  # Set POWER SAVING
+        self.send_command(0xE3)  # Set POWER SAVING
         self.send_data(0x33)
         self.SetFulltReg()
         self.send_command(0x04)  # power on
@@ -207,11 +347,11 @@ class EPD:
         self.send_command(0x01)  # power setting
         self.send_data(0x03)
         self.send_data(0x00)
-        self.send_data(0x2b)
-        self.send_data(0x2b)
+        self.send_data(0x2B)
+        self.send_data(0x2B)
 
         self.send_command(0x06)  # Configuring the charge pump
-        self.send_data(0x3f)
+        self.send_data(0x3F)
 
         self.send_command(0x2A)  # Setting XON and the options of LUT
         self.send_data(0x00)
@@ -221,7 +361,7 @@ class EPD:
         self.send_data(0x17)
 
         self.send_command(0x50)  # Set VCOM and data output interval
-        self.send_data(0xf2)
+        self.send_data(0xF2)
 
         self.send_command(0x60)  # Set The non-overlapping period of Gate and Source.
         self.send_data(0x22)
@@ -229,7 +369,7 @@ class EPD:
         self.send_command(0x82)  # Set VCOM_DC value
         self.send_data(0x12)  # -1v
 
-        self.send_command(0xe3)  # Set POWER SAVING
+        self.send_command(0xE3)  # Set POWER SAVING
         self.send_data(0x33)
 
         self.SetPartReg()
@@ -241,17 +381,17 @@ class EPD:
 
     def getbuffer(self, image):
         buf = [0xFF] * (int(self.width / 8) * self.height)
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
-        if (imwidth == self.width and imheight == self.height):
+        if imwidth == self.width and imheight == self.height:
             logger.debug("Horizontal")
             for y in range(imheight):
                 for x in range(imwidth):
                     # Set the bits for the column of pixels at the current position.
                     if pixels[x, y] == 0:
                         buf[int((x + y * self.width) / 8)] &= ~(0x80 >> (x % 8))
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             logger.debug("Vertical")
             for y in range(imheight):
                 for x in range(imwidth):
@@ -262,10 +402,10 @@ class EPD:
         return buf
 
     def display(self, image):
-        if (image == None):
+        if image == None:
             return
         # Width = (self.width % 8 == 0)? (self.width // 8 ): (self.width // 8 + 1)
-        if (self.width % 8 == 0):
+        if self.width % 8 == 0:
             Width = self.width // 8
         else:
             Width = self.width // 8 + 1
@@ -273,7 +413,7 @@ class EPD:
         self.send_command(0x10)
         for j in range(0, self.height):
             for i in range(0, int(Width)):
-                self.send_data(0xff)
+                self.send_data(0xFF)
 
         self.send_command(0x13)
         for j in range(0, self.height):
@@ -283,7 +423,7 @@ class EPD:
 
     def Clear(self):
         # Width = (self.width % 8 == 0)? (self.width // 8 ): (self.width // 8 + 1)
-        if (self.width % 8 == 0):
+        if self.width % 8 == 0:
             Width = self.width // 8
         else:
             Width = self.width // 8 + 1
@@ -298,7 +438,7 @@ class EPD:
         self.send_command(0x13)
         for j in range(0, Height):
             for i in range(0, int(Width)):
-                self.send_data(0xff)
+                self.send_data(0xFF)
         self.TurnOnDisplay()
 
     def DisplayPartial(self, old_Image, Image):
@@ -314,7 +454,7 @@ class EPD:
         self.send_data(0x00)
 
         # Width = (self.width % 8 == 0)? (self.width // 8 ): (self.width // 8 + 1)
-        if (self.width % 8 == 0):
+        if self.width % 8 == 0:
             Width = self.width // 8
         else:
             Width = self.width // 8 + 1
@@ -336,7 +476,7 @@ class EPD:
 
     def Sleep(self):
         self.send_command(0x50)
-        self.send_data(0xf7)
+        self.send_data(0xF7)
         self.send_command(0x02)
         self.ReadBusy()
         self.send_command(0x07)
@@ -345,5 +485,6 @@ class EPD:
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
 
 ### END OF FILE ###

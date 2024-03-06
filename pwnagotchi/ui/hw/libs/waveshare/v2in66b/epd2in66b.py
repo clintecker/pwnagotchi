@@ -76,12 +76,12 @@ class EPD:
 
     def ReadBusy(self):
         logger.debug("e-Paper busy")
-        while (epdconfig.digital_read(self.busy_pin) == 1):  # 0: idle, 1: busy
+        while epdconfig.digital_read(self.busy_pin) == 1:  # 0: idle, 1: busy
             epdconfig.delay_ms(20)
         logger.debug("e-Paper busy release")
 
     def init(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
         # EPD hardware init start
         self.reset()
@@ -130,18 +130,18 @@ class EPD:
     def getbuffer(self, image):
         # logger.debug("bufsiz = ",int(self.width/8) * self.height)
         buf = [0xFF] * (int(self.width / 8) * self.height)
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
         # logger.debug("imwidth = %d, imheight = %d",imwidth,imheight)
-        if (imwidth == self.width and imheight == self.height):
+        if imwidth == self.width and imheight == self.height:
             logger.debug("Vertical")
             for y in range(imheight):
                 for x in range(imwidth):
                     # Set the bits for the column of pixels at the current position.
                     if pixels[x, y] == 0:
                         buf[int((x + y * self.width) / 8)] &= ~(0x80 >> (x % 8))
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             logger.debug("Horizontal")
             for y in range(imheight):
                 for x in range(imwidth):
@@ -152,7 +152,7 @@ class EPD:
         return buf
 
     def display(self, Blackimage, Redimage):
-        if (Blackimage == None or Redimage == None):
+        if Blackimage == None or Redimage == None:
             return
         Redimage_1 = [0x00] * len(Redimage)
         for i in range(len(Redimage)):
@@ -172,7 +172,7 @@ class EPD:
             linewidth = int(self.width / 8) + 1
 
         self.send_command(0x24)
-        self.send_data2([0xff] * int(self.height * linewidth))
+        self.send_data2([0xFF] * int(self.height * linewidth))
 
         self.send_command(0x26)
         self.send_data2([0x00] * int(self.height * linewidth))
@@ -180,10 +180,11 @@ class EPD:
         self.turnon_display()
 
     def sleep(self):
-        self.send_command(0X10)  # DEEP_SLEEP_MODE
+        self.send_command(0x10)  # DEEP_SLEEP_MODE
         self.send_data(0x01)
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
 
 ### END OF FILE ###

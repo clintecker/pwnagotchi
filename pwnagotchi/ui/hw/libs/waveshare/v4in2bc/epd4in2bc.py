@@ -69,12 +69,12 @@ class EPD:
 
     def ReadBusy(self):
         logger.debug("e-Paper busy")
-        while (epdconfig.digital_read(self.busy_pin) == 0):  # 0: idle, 1: busy
+        while epdconfig.digital_read(self.busy_pin) == 0:  # 0: idle, 1: busy
             epdconfig.delay_ms(100)
         logger.debug("e-Paper busy release")
 
     def init(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
 
         self.reset()
@@ -95,18 +95,18 @@ class EPD:
     def getbuffer(self, image):
         # logger.debug("bufsiz = ",int(self.width/8) * self.height)
         buf = [0xFF] * (int(self.width / 8) * self.height)
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
         # logger.debug("imwidth = %d, imheight = %d",imwidth,imheight)
-        if (imwidth == self.width and imheight == self.height):
+        if imwidth == self.width and imheight == self.height:
             logger.debug("Horizontal")
             for y in range(imheight):
                 for x in range(imwidth):
                     # Set the bits for the column of pixels at the current position.
                     if pixels[x, y] == 0:
                         buf[int((x + y * self.width) / 8)] &= ~(0x80 >> (x % 8))
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             logger.debug("Vertical")
             for y in range(imheight):
                 for x in range(imwidth):
@@ -148,4 +148,6 @@ class EPD:
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
+
 ### END OF FILE ###

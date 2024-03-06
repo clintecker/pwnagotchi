@@ -91,7 +91,9 @@ class RaspberryPi:
         self.GPIO.output(self.DC_PIN, 0)
         self.GPIO.output(self.PWR_PIN, 0)
 
-        self.GPIO.cleanup([self.RST_PIN, self.DC_PIN, self.CS_PIN, self.BUSY_PIN, self.PWR_PIN])
+        self.GPIO.cleanup(
+            [self.RST_PIN, self.DC_PIN, self.CS_PIN, self.BUSY_PIN, self.PWR_PIN]
+        )
 
 
 class JetsonNano:
@@ -104,21 +106,23 @@ class JetsonNano:
 
     def __init__(self):
         import ctypes
+
         find_dirs = [
             os.path.dirname(os.path.realpath(__file__)),
-            '/usr/local/lib',
-            '/usr/lib',
+            "/usr/local/lib",
+            "/usr/lib",
         ]
         self.SPI = None
         for find_dir in find_dirs:
-            so_filename = os.path.join(find_dir, 'sysfs_software_spi.so')
+            so_filename = os.path.join(find_dir, "sysfs_software_spi.so")
             if os.path.exists(so_filename):
                 self.SPI = ctypes.cdll.LoadLibrary(so_filename)
                 break
         if self.SPI is None:
-            raise RuntimeError('Cannot find sysfs_software_spi.so')
+            raise RuntimeError("Cannot find sysfs_software_spi.so")
 
         import Jetson.GPIO
+
         self.GPIO = Jetson.GPIO
 
     def digital_write(self, pin, value):
@@ -160,7 +164,9 @@ class JetsonNano:
         self.GPIO.output(self.DC_PIN, 0)
         self.GPIO.output(self.PWR_PIN, 0)
 
-        self.GPIO.cleanup([self.RST_PIN, self.DC_PIN, self.CS_PIN, self.BUSY_PIN, self.PWR_PIN])
+        self.GPIO.cleanup(
+            [self.RST_PIN, self.DC_PIN, self.CS_PIN, self.BUSY_PIN, self.PWR_PIN]
+        )
 
 
 class SunriseX3:
@@ -227,17 +233,19 @@ class SunriseX3:
         self.GPIO.output(self.DC_PIN, 0)
         self.GPIO.output(self.PWR_PIN, 0)
 
-        self.GPIO.cleanup([self.RST_PIN, self.DC_PIN, self.CS_PIN, self.BUSY_PIN], self.PWR_PIN)
+        self.GPIO.cleanup(
+            [self.RST_PIN, self.DC_PIN, self.CS_PIN, self.BUSY_PIN], self.PWR_PIN
+        )
 
 
-if os.path.exists('/sys/bus/platform/drivers/gpiomem-bcm2835'):
+if os.path.exists("/sys/bus/platform/drivers/gpiomem-bcm2835"):
     implementation = RaspberryPi()
-elif os.path.exists('/sys/bus/platform/drivers/gpio-x3'):
+elif os.path.exists("/sys/bus/platform/drivers/gpio-x3"):
     implementation = SunriseX3()
 else:
     implementation = RaspberryPi()
 
-for func in [x for x in dir(implementation) if not x.startswith('_')]:
+for func in [x for x in dir(implementation) if not x.startswith("_")]:
     setattr(sys.modules[__name__], func, getattr(implementation, func))
 
 ### END OF FILE ###

@@ -99,17 +99,69 @@ class EPD:
         self.height = EPD_HEIGHT
 
     lut_full_update = [
-        0x02, 0x02, 0x01, 0x11, 0x12, 0x12, 0x22, 0x22,
-        0x66, 0x69, 0x69, 0x59, 0x58, 0x99, 0x99, 0x88,
-        0x00, 0x00, 0x00, 0x00, 0xF8, 0xB4, 0x13, 0x51,
-        0x35, 0x51, 0x51, 0x19, 0x01, 0x00
+        0x02,
+        0x02,
+        0x01,
+        0x11,
+        0x12,
+        0x12,
+        0x22,
+        0x22,
+        0x66,
+        0x69,
+        0x69,
+        0x59,
+        0x58,
+        0x99,
+        0x99,
+        0x88,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0xF8,
+        0xB4,
+        0x13,
+        0x51,
+        0x35,
+        0x51,
+        0x51,
+        0x19,
+        0x01,
+        0x00,
     ]
 
     lut_partial_update = [
-        0x10, 0x18, 0x18, 0x08, 0x18, 0x18, 0x08, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x13, 0x14, 0x44, 0x12,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+        0x10,
+        0x18,
+        0x18,
+        0x08,
+        0x18,
+        0x18,
+        0x08,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x13,
+        0x14,
+        0x44,
+        0x12,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
     ]
 
     # Hardware reset
@@ -135,7 +187,7 @@ class EPD:
 
     def ReadBusy(self):
         logger.debug("e-Paper busy")
-        while (epdconfig.digital_read(self.busy_pin) == 1):  # 0: idle, 1: busy
+        while epdconfig.digital_read(self.busy_pin) == 1:  # 0: idle, 1: busy
             epdconfig.delay_ms(100)
         logger.debug("e-Paper busy release")
 
@@ -205,17 +257,17 @@ class EPD:
 
     def getbuffer(self, image):
         buf = [0xFF] * (int(self.width / 8) * self.height)
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
-        if (imwidth == self.width and imheight == self.height):
+        if imwidth == self.width and imheight == self.height:
             logger.debug("Horizontal")
             for y in range(imheight):
                 for x in range(imwidth):
                     # Set the bits for the column of pixels at the current position.
                     if pixels[x, y] == 0:
                         buf[int((x + y * self.width) / 8)] &= ~(0x80 >> (x % 8))
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             logger.debug("Vertical")
             for y in range(imheight):
                 for x in range(imwidth):
@@ -226,7 +278,7 @@ class EPD:
         return buf
 
     def display(self, image):
-        if (image == None):
+        if image == None:
             return
 
         self.SetWindow(0, 0, self.width, self.height)
@@ -257,4 +309,6 @@ class EPD:
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
+
 ### END OF FILE ###

@@ -18,7 +18,7 @@ class EPD(object):
         self.width = 128
         self.height = 128
         self.LCD = LCD_1in44.LCD()
-        self.LCD.Lcd_ScanDir = LCD_1in44.SCAN_DIR_DFT  #SCAN_DIR_DFT = D2U_L2R
+        self.LCD.Lcd_ScanDir = LCD_1in44.SCAN_DIR_DFT  # SCAN_DIR_DFT = D2U_L2R
         self.LCD.LCD_Init(self.LCD.Lcd_ScanDir)
 
     def init(self):

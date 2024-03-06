@@ -70,12 +70,12 @@ class EPD:
 
     def ReadBusy(self):
         logger.debug("e-Paper busy")
-        while (epdconfig.digital_read(self.busy_pin) == 0):  # 0: idle, 1: busy
+        while epdconfig.digital_read(self.busy_pin) == 0:  # 0: idle, 1: busy
             epdconfig.delay_ms(100)
         logger.debug("e-Paper busy release")
 
     def init(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
         # EPD hardware init start
         self.reset()
@@ -89,15 +89,15 @@ class EPD:
         self.send_data(0x08)
 
         self.send_command(0x06)  # BOOSTER_SOFT_START
-        self.send_data(0xc7)
-        self.send_data(0xcc)
+        self.send_data(0xC7)
+        self.send_data(0xCC)
         self.send_data(0x28)
 
         self.send_command(0x04)  # POWER_ON
         self.ReadBusy()
 
         self.send_command(0x30)  # PLL_CONTROL
-        self.send_data(0x3c)
+        self.send_data(0x3C)
 
         self.send_command(0x41)  # TEMPERATURE_CALIBRATION
         self.send_data(0x00)
@@ -117,7 +117,7 @@ class EPD:
         self.send_command(0x82)  # VCM_DC_SETTING
         self.send_data(0x1E)  # decide by LUT file
 
-        self.send_command(0xe5)  # FLASH MODE
+        self.send_command(0xE5)  # FLASH MODE
         self.send_data(0x03)
 
         # EPD hardware init end
@@ -125,11 +125,11 @@ class EPD:
 
     def getbuffer(self, image):
         buf = [0x00] * int(self.width * self.height / 4)
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
-        logger.debug('imwidth = %d  imheight =  %d ', imwidth, imheight)
-        if (imwidth == self.width and imheight == self.height):
+        logger.debug("imwidth = %d  imheight =  %d ", imwidth, imheight)
+        if imwidth == self.width and imheight == self.height:
             for y in range(imheight):
                 for x in range(imwidth):
                     # Set the bits for the column of pixels at the current position.
@@ -140,15 +140,19 @@ class EPD:
                         buf[int((x + y * self.width) / 4)] |= 0x40 >> (x % 4 * 2)
                     else:  # white
                         buf[int((x + y * self.width) / 4)] |= 0xC0 >> (x % 4 * 2)
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             for y in range(imheight):
                 for x in range(imwidth):
                     newx = y
                     newy = self.height - x - 1
                     if pixels[x, y] < 64:  # black
-                        buf[int((newx + newy * self.width) / 4)] &= ~(0xC0 >> (y % 4 * 2))
+                        buf[int((newx + newy * self.width) / 4)] &= ~(
+                            0xC0 >> (y % 4 * 2)
+                        )
                     elif pixels[x, y] < 192:  # convert gray to red
-                        buf[int((newx + newy * self.width) / 4)] &= ~(0xC0 >> (y % 4 * 2))
+                        buf[int((newx + newy * self.width) / 4)] &= ~(
+                            0xC0 >> (y % 4 * 2)
+                        )
                         buf[int((newx + newy * self.width) / 4)] |= 0x40 >> (y % 4 * 2)
                     else:  # white
                         buf[int((newx + newy * self.width) / 4)] |= 0xC0 >> (y % 4 * 2)
@@ -159,19 +163,19 @@ class EPD:
         for i in range(0, int(self.width / 4 * self.height)):
             temp1 = image[i]
             j = 0
-            while (j < 4):
-                if ((temp1 & 0xC0) == 0xC0):
+            while j < 4:
+                if (temp1 & 0xC0) == 0xC0:
                     temp2 = 0x03
-                elif ((temp1 & 0xC0) == 0x00):
+                elif (temp1 & 0xC0) == 0x00:
                     temp2 = 0x00
                 else:
                     temp2 = 0x04
                 temp2 = (temp2 << 4) & 0xFF
                 temp1 = (temp1 << 2) & 0xFF
                 j += 1
-                if ((temp1 & 0xC0) == 0xC0):
+                if (temp1 & 0xC0) == 0xC0:
                     temp2 |= 0x03
-                elif ((temp1 & 0xC0) == 0x00):
+                elif (temp1 & 0xC0) == 0x00:
                     temp2 |= 0x00
                 else:
                     temp2 |= 0x04
@@ -195,9 +199,10 @@ class EPD:
         self.send_command(0x02)  # POWER_OFF
         self.ReadBusy()
         self.send_command(0x07)  # DEEP_SLEEP
-        self.send_data(0XA5)
+        self.send_data(0xA5)
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
 
 ### END OF FILE ###

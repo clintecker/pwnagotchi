@@ -77,8 +77,8 @@ class EPD:
 
     def ReadBusy(self):
         logger.debug("e-Paper busy")
-        self.send_command(0X71)
-        while (epdconfig.digital_read(self.busy_pin) == 1):  # 0: idle, 1: busy
+        self.send_command(0x71)
+        while epdconfig.digital_read(self.busy_pin) == 1:  # 0: idle, 1: busy
             epdconfig.delay_ms(200)
         logger.debug("e-Paper busy release")
 
@@ -107,7 +107,7 @@ class EPD:
         self.ReadBusy()
 
     def init(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
 
         # EPD hardware init start
@@ -155,7 +155,7 @@ class EPD:
         return 0
 
     def init_Fast(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
 
         # EPD hardware init start
@@ -174,7 +174,7 @@ class EPD:
         self.ReadBusy()
 
         self.send_command(0x1A)  # Write to temperature register
-        self.send_data(0x5a)  # 90
+        self.send_data(0x5A)  # 90
         self.send_data(0x00)
 
         self.send_command(0x22)  # Load temperature value
@@ -212,18 +212,18 @@ class EPD:
     def getbuffer(self, image):
         # logger.debug("bufsiz = ",int(self.width/8) * self.height)
         buf = [0xFF] * (int(self.width / 8) * self.height)
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
         # logger.debug("imwidth = %d, imheight = %d",imwidth,imheight)
-        if (imwidth == self.width and imheight == self.height):
+        if imwidth == self.width and imheight == self.height:
             logger.debug("Vertical")
             for y in range(imheight):
                 for x in range(imwidth):
                     # Set the bits for the column of pixels at the current position.
                     if pixels[x, y] == 0:
                         buf[int((x + y * self.width) / 8)] &= ~(0x80 >> (x % 8))
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             logger.debug("Horizontal")
             for y in range(imheight):
                 for x in range(imwidth):
@@ -234,15 +234,15 @@ class EPD:
         return buf
 
     def display(self, blackimage, ryimage):  # ryimage: red or yellow image
-        if (self.width % 8 == 0):
+        if self.width % 8 == 0:
             Width = self.width // 8
         else:
             Width = self.width // 8 + 1
         Height = self.height
-        if (blackimage != None):
+        if blackimage != None:
             self.send_command(0x24)
             self.send_data2(blackimage)
-        if (ryimage != None):
+        if ryimage != None:
             for j in range(Height):
                 for i in range(Width):
                     ryimage[i + j * Width] = ~ryimage[i + j * Width]
@@ -252,15 +252,15 @@ class EPD:
         self.TurnOnDisplay()
 
     def display_Fast(self, blackimage, ryimage):  # ryimage: red or yellow image
-        if (self.width % 8 == 0):
+        if self.width % 8 == 0:
             Width = self.width // 8
         else:
             Width = self.width // 8 + 1
         Height = self.height
-        if (blackimage != None):
+        if blackimage != None:
             self.send_command(0x24)
             self.send_data2(blackimage)
-        if (ryimage != None):
+        if ryimage != None:
             for j in range(Height):
                 for i in range(Width):
                     ryimage[i + j * Width] = ~ryimage[i + j * Width]
@@ -271,7 +271,7 @@ class EPD:
 
     def Clear(self):
         self.send_command(0x24)
-        self.send_data2([0xff] * int(self.width * self.height // 8))
+        self.send_data2([0xFF] * int(self.width * self.height // 8))
         self.send_command(0x26)
         self.send_data2([0x00] * int(self.width * self.height // 8))
 
@@ -279,22 +279,22 @@ class EPD:
 
     def Clear_Fast(self):
         self.send_command(0x24)
-        self.send_data2([0xff] * int(self.width * self.height // 8))
+        self.send_data2([0xFF] * int(self.width * self.height // 8))
         self.send_command(0x26)
         self.send_data2([0x00] * int(self.width * self.height // 8))
 
         self.TurnOnDisplay_Fast()
 
     def display_Base(self, blackimage, ryimage):
-        if (self.width % 8 == 0):
+        if self.width % 8 == 0:
             Width = self.width // 8
         else:
             Width = self.width // 8 + 1
         Height = self.height
-        if (blackimage != None):
+        if blackimage != None:
             self.send_command(0x24)
             self.send_data2(blackimage)
-        if (ryimage != None):
+        if ryimage != None:
             for j in range(Height):
                 for i in range(Width):
                     ryimage[i + j * Width] = ~ryimage[i + j * Width]
@@ -303,7 +303,7 @@ class EPD:
 
         self.TurnOnDisplay_Base()
 
-        if (blackimage != None):
+        if blackimage != None:
             for j in range(Height):
                 for i in range(Width):
                     blackimage[i + j * Width] = ~blackimage[i + j * Width]
@@ -314,7 +314,7 @@ class EPD:
             self.send_data2(blackimage)
 
     def display_Base_color(self, color):
-        if (self.width % 8 == 0):
+        if self.width % 8 == 0:
             Width = self.width // 8
         else:
             Width = self.width // 8 + 1
@@ -336,8 +336,11 @@ class EPD:
                 self.send_data(color)
 
     def display_Partial(self, Image, Xstart, Ystart, Xend, Yend):
-        if ((Xstart % 8 + Xend % 8 == 8 & Xstart % 8 > Xend % 8) | Xstart % 8 + Xend % 8 == 0 | (
-                Xend - Xstart) % 8 == 0):
+        if (
+            (Xstart % 8 + Xend % 8 == 8 & Xstart % 8 > Xend % 8) | Xstart % 8 + Xend % 8
+            == 0 | (Xend - Xstart) % 8
+            == 0
+        ):
             Xstart = Xstart // 8
             Xend = Xend // 8
         else:
@@ -347,7 +350,7 @@ class EPD:
             else:
                 Xend = Xend // 8 + 1
 
-        if (self.width % 8 == 0):
+        if self.width % 8 == 0:
             Width = self.width // 8
         else:
             Width = self.width // 8 + 1
@@ -357,24 +360,29 @@ class EPD:
         Yend -= 1
 
         self.send_command(0x44)  # set RAM x address start/end, in page 35
-        self.send_data(Xstart & 0xff)  # RAM x address start at 00h
-        self.send_data(Xend & 0xff)  # RAM x address end at 0fh(15+1)*8->128
+        self.send_data(Xstart & 0xFF)  # RAM x address start at 00h
+        self.send_data(Xend & 0xFF)  # RAM x address end at 0fh(15+1)*8->128
         self.send_command(0x45)  # set RAM y address start/end, in page 35
-        self.send_data(Ystart & 0xff)  # RAM y address start at 0127h
+        self.send_data(Ystart & 0xFF)  # RAM y address start at 0127h
         self.send_data((Ystart >> 8) & 0x01)  # RAM y address start at 0127h
-        self.send_data(Yend & 0xff)  # RAM y address end at 00h
+        self.send_data(Yend & 0xFF)  # RAM y address end at 00h
         self.send_data((Yend >> 8) & 0x01)
 
         self.send_command(0x4E)  # set RAM x address count to 0
-        self.send_data(Xstart & 0xff)
+        self.send_data(Xstart & 0xFF)
         self.send_command(0x4F)  # set RAM y address count to 0X127
-        self.send_data(Ystart & 0xff)
+        self.send_data(Ystart & 0xFF)
         self.send_data((Ystart >> 8) & 0x01)
 
         self.send_command(0x24)  # Write Black and White image to RAM
         for j in range(Height):
             for i in range(Width):
-                if ((j > Ystart - 1) & (j < (Yend + 1)) & (i > Xstart - 1) & (i < (Xend + 1))):
+                if (
+                    (j > Ystart - 1)
+                    & (j < (Yend + 1))
+                    & (i > Xstart - 1)
+                    & (i < (Xend + 1))
+                ):
                     self.send_data(Image[i + j * Width])
         self.TurnOnDisplay_Partial()
 
@@ -384,4 +392,6 @@ class EPD:
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
+
 ### END OF FILE ###

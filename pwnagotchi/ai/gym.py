@@ -10,22 +10,21 @@ from pwnagotchi.ai.parameter import Parameter
 
 class Environment(gym.Env):
     render_mode = "human"
-    metadata = {'render_modes': ['human']}
+    metadata = {"render_modes": ["human"]}
     params = [
-        Parameter('min_rssi', min_value=-200, max_value=-50),
-        Parameter('ap_ttl', min_value=30, max_value=600),
-        Parameter('sta_ttl', min_value=60, max_value=300),
-
-        Parameter('recon_time', min_value=5, max_value=60),
-        Parameter('max_inactive_scale', min_value=3, max_value=10),
-        Parameter('recon_inactive_multiplier', min_value=1, max_value=3),
-        Parameter('hop_recon_time', min_value=5, max_value=60),
-        Parameter('min_recon_time', min_value=1, max_value=30),
-        Parameter('max_interactions', min_value=1, max_value=25),
-        Parameter('max_misses_for_recon', min_value=3, max_value=10),
-        Parameter('excited_num_epochs', min_value=5, max_value=30),
-        Parameter('bored_num_epochs', min_value=5, max_value=30),
-        Parameter('sad_num_epochs', min_value=5, max_value=30),
+        Parameter("min_rssi", min_value=-200, max_value=-50),
+        Parameter("ap_ttl", min_value=30, max_value=600),
+        Parameter("sta_ttl", min_value=60, max_value=300),
+        Parameter("recon_time", min_value=5, max_value=60),
+        Parameter("max_inactive_scale", min_value=3, max_value=10),
+        Parameter("recon_inactive_multiplier", min_value=1, max_value=3),
+        Parameter("hop_recon_time", min_value=5, max_value=60),
+        Parameter("min_recon_time", min_value=1, max_value=30),
+        Parameter("max_interactions", min_value=1, max_value=25),
+        Parameter("max_misses_for_recon", min_value=3, max_value=10),
+        Parameter("excited_num_epochs", min_value=5, max_value=30),
+        Parameter("bored_num_epochs", min_value=5, max_value=30),
+        Parameter("sad_num_epochs", min_value=5, max_value=30),
     ]
 
     def __init__(self, agent, epoch):
@@ -38,21 +37,26 @@ class Environment(gym.Env):
         channels = agent.supported_channels()
 
         Environment.params += [
-            Parameter('_channel_%d' % ch, min_value=0, max_value=1, meta=ch + 1) for ch in
-            range(featurizer.histogram_size) if ch + 1 in channels
+            Parameter("_channel_%d" % ch, min_value=0, max_value=1, meta=ch + 1)
+            for ch in range(featurizer.histogram_size)
+            if ch + 1 in channels
         ]
 
         self.last = {
-            'reward': 0.0,
-            'observation': None,
-            'policy': None,
-            'params': {},
-            'state': None,
-            'state_v': None
+            "reward": 0.0,
+            "observation": None,
+            "policy": None,
+            "params": {},
+            "state": None,
+            "state_v": None,
         }
 
-        self.action_space = spaces.MultiDiscrete([p.space_size() for p in Environment.params if p.trainable])
-        self.observation_space = spaces.Box(low=0, high=1, shape=featurizer.shape, dtype=np.float32)
+        self.action_space = spaces.MultiDiscrete(
+            [p.space_size() for p in Environment.params if p.trainable]
+        )
+        self.observation_space = spaces.Box(
+            low=0, high=1, shape=featurizer.shape, dtype=np.float32
+        )
         self.reward_range = reward.range
 
     @staticmethod
@@ -71,7 +75,7 @@ class Environment(gym.Env):
         for i in range(num):
             param = Environment.params[i]
 
-            if '_channel' not in param.name:
+            if "_channel" not in param.name:
                 params[param.name] = param.to_param_value(policy[i])
             else:
                 has_chan = param.to_param_value(policy[i])
@@ -80,7 +84,7 @@ class Environment(gym.Env):
                 if has_chan:
                     channels.append(chan)
 
-        params['channels'] = channels
+        params["channels"] = channels
 
         return params
 
@@ -90,8 +94,8 @@ class Environment(gym.Env):
 
     def _apply_policy(self, policy):
         new_params = Environment.policy_to_params(policy)
-        self.last['policy'] = policy
-        self.last['params'] = new_params
+        self.last["policy"] = policy
+        self.last["params"] = new_params
         self._agent.on_ai_policy(new_params)
 
     def step(self, policy):
@@ -103,28 +107,33 @@ class Environment(gym.Env):
         # wait for the algorithm to run with the new parameters
         state = self._next_epoch()
 
-        self.last['reward'] = state['reward']
-        self.last['state'] = state
-        self.last['state_v'] = featurizer.featurize(state, self._epoch_num)
+        self.last["reward"] = state["reward"]
+        self.last["state"] = state
+        self.last["state_v"] = featurizer.featurize(state, self._epoch_num)
 
         self._agent.on_ai_step()
 
-        return self.last['state_v'], self.last['reward'], not self._agent.is_training(), {}
+        return (
+            self.last["state_v"],
+            self.last["reward"],
+            not self._agent.is_training(),
+            {},
+        )
 
     def reset(self):
         # logging.info("[ai] resetting environment ...")
         self._epoch_num = 0
         state = self._next_epoch()
-        self.last['state'] = state
-        self.last['state_v'] = featurizer.featurize(state, 1)
-        return self.last['state_v']
+        self.last["state"] = state
+        self.last["state_v"] = featurizer.featurize(state, 1)
+        return self.last["state_v"]
 
     def _render_histogram(self, hist):
         for ch in range(featurizer.histogram_size):
             if hist[ch]:
                 logging.info("      CH %d: %s" % (ch + 1, hist[ch]))
 
-    def render(self, mode='human', close=False, force=False):
+    def render(self, mode="human", close=False, force=False):
         # when using a vectorialized environment, render gets called twice
         # avoid rendering the same data
         if self._last_render == self._epoch_num:
@@ -135,14 +144,21 @@ class Environment(gym.Env):
 
         self._last_render = self._epoch_num
 
-        logging.info("[AI] --- training epoch %d/%d ---" % (self._epoch_num, self._agent.training_epochs()))
-        logging.info("[AI] REWARD: %f" % self.last['reward'])
+        logging.info(
+            "[AI] --- training epoch %d/%d ---"
+            % (self._epoch_num, self._agent.training_epochs())
+        )
+        logging.info("[AI] REWARD: %f" % self.last["reward"])
 
         logging.debug(
-            "[AI] policy: %s" % ', '.join("%s:%s" % (name, value) for name, value in self.last['params'].items()))
+            "[AI] policy: %s"
+            % ", ".join(
+                "%s:%s" % (name, value) for name, value in self.last["params"].items()
+            )
+        )
 
         logging.info("[AI] observation:")
-        for name, value in self.last['state'].items():
-            if 'histogram' in name:
-                logging.info("    %s" % name.replace('_histogram', ''))
+        for name, value in self.last["state"].items():
+            if "histogram" in name:
+                logging.info("    %s" % name.replace("_histogram", ""))
                 self._render_histogram(value)

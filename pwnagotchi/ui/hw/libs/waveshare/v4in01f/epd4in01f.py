@@ -48,12 +48,12 @@ class EPD:
         self.width = EPD_WIDTH
         self.height = EPD_HEIGHT
         self.BLACK = 0x000000  # 0000  BGR
-        self.WHITE = 0xffffff  # 0001
-        self.GREEN = 0x00ff00  # 0010
-        self.BLUE = 0xff0000  # 0011
-        self.RED = 0x0000ff  # 0100
-        self.YELLOW = 0x00ffff  # 0101
-        self.ORANGE = 0x0080ff  # 0110
+        self.WHITE = 0xFFFFFF  # 0001
+        self.GREEN = 0x00FF00  # 0010
+        self.BLUE = 0xFF0000  # 0011
+        self.RED = 0x0000FF  # 0100
+        self.YELLOW = 0x00FFFF  # 0101
+        self.ORANGE = 0x0080FF  # 0110
 
     # Hardware reset
     def reset(self):
@@ -85,25 +85,25 @@ class EPD:
 
     def ReadBusyHigh(self):
         logger.debug("e-Paper busy")
-        while (epdconfig.digital_read(self.busy_pin) == 0):  # 0: idle, 1: busy
+        while epdconfig.digital_read(self.busy_pin) == 0:  # 0: idle, 1: busy
             epdconfig.delay_ms(10)
         logger.debug("e-Paper busy release")
 
     def ReadBusyLow(self):
         logger.debug("e-Paper busy")
-        while (epdconfig.digital_read(self.busy_pin) == 1):  # 0: idle, 1: busy
+        while epdconfig.digital_read(self.busy_pin) == 1:  # 0: idle, 1: busy
             epdconfig.delay_ms(10)
         logger.debug("e-Paper busy release")
 
     def init(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
         # EPD hardware init start
         self.reset()
 
         self.ReadBusyHigh()
         self.send_command(0x00)
-        self.send_data(0x2f)
+        self.send_data(0x2F)
         self.send_data(0x00)
         self.send_command(0x01)
         self.send_data(0x37)
@@ -135,58 +135,114 @@ class EPD:
 
     def getbuffer(self, image):
         buf = [0x00] * int(self.width * self.height / 2)
-        image_monocolor = image.convert('RGB')  # Picture mode conversion
+        image_monocolor = image.convert("RGB")  # Picture mode conversion
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
-        logger.debug('imwidth = %d  imheight =  %d ', imwidth, imheight)
-        if (imwidth == self.width and imheight == self.height):
+        logger.debug("imwidth = %d  imheight =  %d ", imwidth, imheight)
+        if imwidth == self.width and imheight == self.height:
             for y in range(imheight):
                 for x in range(imwidth):
                     # Set the bits for the column of pixels at the current position.
                     Add = int((x + y * self.width) / 2)
-                    Color = 0;
-                    if (pixels[x, y][0] == 0 and pixels[x, y][1] == 0 and pixels[x, y][2] == 0):
+                    Color = 0
+                    if (
+                        pixels[x, y][0] == 0
+                        and pixels[x, y][1] == 0
+                        and pixels[x, y][2] == 0
+                    ):
                         Color = 0
-                    elif (pixels[x, y][0] == 255 and pixels[x, y][1] == 255 and pixels[x, y][2] == 255):
+                    elif (
+                        pixels[x, y][0] == 255
+                        and pixels[x, y][1] == 255
+                        and pixels[x, y][2] == 255
+                    ):
                         Color = 1
-                    elif (pixels[x, y][0] == 0 and pixels[x, y][1] == 255 and pixels[x, y][2] == 0):
+                    elif (
+                        pixels[x, y][0] == 0
+                        and pixels[x, y][1] == 255
+                        and pixels[x, y][2] == 0
+                    ):
                         Color = 2
-                    elif (pixels[x, y][0] == 0 and pixels[x, y][1] == 0 and pixels[x, y][2] == 255):
+                    elif (
+                        pixels[x, y][0] == 0
+                        and pixels[x, y][1] == 0
+                        and pixels[x, y][2] == 255
+                    ):
                         Color = 3
-                    elif (pixels[x, y][0] == 255 and pixels[x, y][1] == 0 and pixels[x, y][2] == 0):
+                    elif (
+                        pixels[x, y][0] == 255
+                        and pixels[x, y][1] == 0
+                        and pixels[x, y][2] == 0
+                    ):
                         Color = 4
-                    elif (pixels[x, y][0] == 255 and pixels[x, y][1] == 255 and pixels[x, y][2] == 0):
+                    elif (
+                        pixels[x, y][0] == 255
+                        and pixels[x, y][1] == 255
+                        and pixels[x, y][2] == 0
+                    ):
                         Color = 5
-                    elif (pixels[x, y][0] == 255 and pixels[x, y][1] == 128 and pixels[x, y][2] == 0):
+                    elif (
+                        pixels[x, y][0] == 255
+                        and pixels[x, y][1] == 128
+                        and pixels[x, y][2] == 0
+                    ):
                         Color = 6
 
                     data_t = buf[Add] & (~(0xF0 >> ((x % 2) * 4)))
-                    buf[Add] = data_t | ((Color << 4) >> ((x % 2) * 4));
+                    buf[Add] = data_t | ((Color << 4) >> ((x % 2) * 4))
 
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             for y in range(imheight):
                 for x in range(imwidth):
                     newx = y
                     newy = self.height - x - 1
                     Add = int((newx + newy * self.width) / 2)
-                    Color = 0;
-                    if (pixels[x, y][0] == 0 and pixels[x, y][1] == 0 and pixels[x, y][2] == 0):
+                    Color = 0
+                    if (
+                        pixels[x, y][0] == 0
+                        and pixels[x, y][1] == 0
+                        and pixels[x, y][2] == 0
+                    ):
                         Color = 0
-                    elif (pixels[x, y][0] == 255 and pixels[x, y][1] == 255 and pixels[x, y][2] == 255):
+                    elif (
+                        pixels[x, y][0] == 255
+                        and pixels[x, y][1] == 255
+                        and pixels[x, y][2] == 255
+                    ):
                         Color = 1
-                    elif (pixels[x, y][0] == 0 and pixels[x, y][1] == 255 and pixels[x, y][2] == 0):
+                    elif (
+                        pixels[x, y][0] == 0
+                        and pixels[x, y][1] == 255
+                        and pixels[x, y][2] == 0
+                    ):
                         Color = 2
-                    elif (pixels[x, y][0] == 0 and pixels[x, y][1] == 0 and pixels[x, y][2] == 255):
+                    elif (
+                        pixels[x, y][0] == 0
+                        and pixels[x, y][1] == 0
+                        and pixels[x, y][2] == 255
+                    ):
                         Color = 3
-                    elif (pixels[x, y][0] == 255 and pixels[x, y][1] == 0 and pixels[x, y][2] == 0):
+                    elif (
+                        pixels[x, y][0] == 255
+                        and pixels[x, y][1] == 0
+                        and pixels[x, y][2] == 0
+                    ):
                         Color = 4
-                    elif (pixels[x, y][0] == 255 and pixels[x, y][1] == 255 and pixels[x, y][2] == 0):
+                    elif (
+                        pixels[x, y][0] == 255
+                        and pixels[x, y][1] == 255
+                        and pixels[x, y][2] == 0
+                    ):
                         Color = 5
-                    elif (pixels[x, y][0] == 255 and pixels[x, y][1] == 128 and pixels[x, y][2] == 0):
+                    elif (
+                        pixels[x, y][0] == 255
+                        and pixels[x, y][1] == 128
+                        and pixels[x, y][2] == 0
+                    ):
                         Color = 6
 
                     data_t = buf[Add] & (~(0xF0 >> ((newx % 2) * 4)))
-                    buf[Add] = data_t | ((Color << 4) >> ((newx % 2) * 4));
+                    buf[Add] = data_t | ((Color << 4) >> ((newx % 2) * 4))
         return buf
 
     def display(self, image):
@@ -232,7 +288,7 @@ class EPD:
     def sleep(self):
         # epdconfig.delay_ms(500)
         self.send_command(0x07)  # DEEP_SLEEP
-        self.send_data(0XA5)
+        self.send_data(0xA5)
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()

@@ -24,7 +24,9 @@ def decode(r, verbose_errors=True):
         return r.json()
     except Exception as e:
         if r.status_code == 200:
-            logging.error("error while decoding json: error='%s' resp='%s'" % (e, r.text))
+            logging.error(
+                "error while decoding json: error='%s' resp='%s'" % (e, r.text)
+            )
         else:
             err = "error %d: %s" % (r.status_code, r.text.strip())
             if verbose_errors:
@@ -34,7 +36,14 @@ def decode(r, verbose_errors=True):
 
 
 class Client(object):
-    def __init__(self, hostname='localhost', scheme='http', port=8081, username='user', password='pass'):
+    def __init__(
+        self,
+        hostname="localhost",
+        scheme="http",
+        port=8081,
+        username="user",
+        password="pass",
+    ):
         self.hostname = hostname
         self.scheme = scheme
         self.port = port
@@ -72,8 +81,12 @@ class Client(object):
         while True:
             logging.info("[bettercap] creating new websocket...")
             try:
-                async with websockets.connect(s, ping_interval=ping_interval, ping_timeout=ping_timeout,
-                                              max_queue=max_queue) as ws:
+                async with websockets.connect(
+                    s,
+                    ping_interval=ping_interval,
+                    ping_timeout=ping_timeout,
+                    max_queue=max_queue,
+                ) as ws:
                     # listener loop
                     while True:
                         try:
@@ -81,37 +94,53 @@ class Client(object):
                                 try:
                                     await consumer(msg)
                                 except Exception as ex:
-                                    logging.debug("[bettercap] error while parsing event (%s)", ex)
+                                    logging.debug(
+                                        "[bettercap] error while parsing event (%s)", ex
+                                    )
                         except websockets.ConnectionClosedError:
                             try:
                                 pong = await ws.ping()
                                 await asyncio.wait_for(pong, timeout=ping_timeout)
-                                logging.warning('[bettercap] ping OK, keeping connection alive...')
+                                logging.warning(
+                                    "[bettercap] ping OK, keeping connection alive..."
+                                )
                                 continue
                             except:
-                                sleep_time = min_sleep + max_sleep*random.random()
-                                logging.warning('[bettercap] ping error - retrying connection in {} sec'.format(sleep_time))
+                                sleep_time = min_sleep + max_sleep * random.random()
+                                logging.warning(
+                                    "[bettercap] ping error - retrying connection in {} sec".format(
+                                        sleep_time
+                                    )
+                                )
                                 await asyncio.sleep(sleep_time)
                                 break
             except ConnectionRefusedError:
-                sleep_time = min_sleep + max_sleep*random.random()
-                logging.warning('[bettercap] nobody seems to be listening at the bettercap endpoint...')
-                logging.warning('[bettercap] retrying connection in {} sec'.format(sleep_time))
+                sleep_time = min_sleep + max_sleep * random.random()
+                logging.warning(
+                    "[bettercap] nobody seems to be listening at the bettercap endpoint..."
+                )
+                logging.warning(
+                    "[bettercap] retrying connection in {} sec".format(sleep_time)
+                )
                 await asyncio.sleep(sleep_time)
                 continue
             except OSError:
                 sleep_time = min_sleep + max_sleep * random.random()
-                logging.warning('connection to the bettercap endpoint failed...')
+                logging.warning("connection to the bettercap endpoint failed...")
                 pwnagotchi.restart("AUTO")
 
     def run(self, command, verbose_errors=True):
         while True:
             try:
-                r = requests.post("%s/session" % self.url, auth=self.auth, json={'cmd': command})
+                r = requests.post(
+                    "%s/session" % self.url, auth=self.auth, json={"cmd": command}
+                )
             except requests.exceptions.ConnectionError as e:
-                sleep_time = min_sleep + max_sleep*random.random()
-                logging.warning("[bettercap] can't run my request... connection to the bettercap endpoint failed...")
-                logging.warning('[bettercap] retrying run in {} sec'.format(sleep_time))
+                sleep_time = min_sleep + max_sleep * random.random()
+                logging.warning(
+                    "[bettercap] can't run my request... connection to the bettercap endpoint failed..."
+                )
+                logging.warning("[bettercap] retrying run in {} sec".format(sleep_time))
                 sleep(sleep_time)
             else:
                 break

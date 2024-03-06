@@ -71,7 +71,7 @@ def do_auto_mode(agent):
 
                 # for each ap on this channel
                 for ap in aps:
-                    logging.info("processing %s" % ap["essid"])
+                    logging.info("processing %s" % ap)
                     # send an association frame in order to get for a PMKID
                     agent.associate(ap)
                     # deauth all client stations in order to get a full handshake

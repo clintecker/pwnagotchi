@@ -50,39 +50,161 @@ class EPD:
     FULL_UPDATE = 0
     PART_UPDATE = 1
     lut_full_update = [
-        0x80, 0x60, 0x40, 0x00, 0x00, 0x00, 0x00,  # LUT0: BB:     VS 0 ~7
-        0x10, 0x60, 0x20, 0x00, 0x00, 0x00, 0x00,  # LUT1: BW:     VS 0 ~7
-        0x80, 0x60, 0x40, 0x00, 0x00, 0x00, 0x00,  # LUT2: WB:     VS 0 ~7
-        0x10, 0x60, 0x20, 0x00, 0x00, 0x00, 0x00,  # LUT3: WW:     VS 0 ~7
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  # LUT4: VCOM:   VS 0 ~7
-
-        0x03, 0x03, 0x00, 0x00, 0x02,  # TP0 A~D RP0
-        0x09, 0x09, 0x00, 0x00, 0x02,  # TP1 A~D RP1
-        0x03, 0x03, 0x00, 0x00, 0x02,  # TP2 A~D RP2
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP3 A~D RP3
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP4 A~D RP4
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP5 A~D RP5
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP6 A~D RP6
-
-        0x15, 0x41, 0xA8, 0x32, 0x30, 0x0A,
+        0x80,
+        0x60,
+        0x40,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT0: BB:     VS 0 ~7
+        0x10,
+        0x60,
+        0x20,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT1: BW:     VS 0 ~7
+        0x80,
+        0x60,
+        0x40,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT2: WB:     VS 0 ~7
+        0x10,
+        0x60,
+        0x20,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT3: WW:     VS 0 ~7
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT4: VCOM:   VS 0 ~7
+        0x03,
+        0x03,
+        0x00,
+        0x00,
+        0x02,  # TP0 A~D RP0
+        0x09,
+        0x09,
+        0x00,
+        0x00,
+        0x02,  # TP1 A~D RP1
+        0x03,
+        0x03,
+        0x00,
+        0x00,
+        0x02,  # TP2 A~D RP2
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP3 A~D RP3
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP4 A~D RP4
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP5 A~D RP5
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP6 A~D RP6
+        0x15,
+        0x41,
+        0xA8,
+        0x32,
+        0x30,
+        0x0A,
     ]
 
     lut_partial_update = [  # 20 bytes
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  # LUT0: BB:     VS 0 ~7
-        0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  # LUT1: BW:     VS 0 ~7
-        0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  # LUT2: WB:     VS 0 ~7
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  # LUT3: WW:     VS 0 ~7
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  # LUT4: VCOM:   VS 0 ~7
-
-        0x0A, 0x00, 0x00, 0x00, 0x00,  # TP0 A~D RP0
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP1 A~D RP1
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP2 A~D RP2
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP3 A~D RP3
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP4 A~D RP4
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP5 A~D RP5
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP6 A~D RP6
-
-        0x15, 0x41, 0xA8, 0x32, 0x30, 0x0A,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT0: BB:     VS 0 ~7
+        0x80,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT1: BW:     VS 0 ~7
+        0x40,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT2: WB:     VS 0 ~7
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT3: WW:     VS 0 ~7
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT4: VCOM:   VS 0 ~7
+        0x0A,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP0 A~D RP0
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP1 A~D RP1
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP2 A~D RP2
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP3 A~D RP3
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP4 A~D RP4
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP5 A~D RP5
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP6 A~D RP6
+        0x15,
+        0x41,
+        0xA8,
+        0x32,
+        0x30,
+        0x0A,
     ]
 
     # Hardware reset
@@ -114,7 +236,7 @@ class EPD:
         epdconfig.digital_write(self.cs_pin, 1)
 
     def ReadBusy(self):
-        while (epdconfig.digital_read(self.busy_pin) == 1):  # 0: idle, 1: busy
+        while epdconfig.digital_read(self.busy_pin) == 1:  # 0: idle, 1: busy
             epdconfig.delay_ms(100)
 
     def TurnOnDisplay(self):
@@ -125,16 +247,16 @@ class EPD:
 
     def TurnOnDisplayPart(self):
         self.send_command(0x22)
-        self.send_data(0x0c)
+        self.send_data(0x0C)
         self.send_command(0x20)
         self.ReadBusy()
 
     def init(self, update):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
         # EPD hardware init start
         self.reset()
-        if (update == self.FULL_UPDATE):
+        if update == self.FULL_UPDATE:
             self.ReadBusy()
             self.send_command(0x12)  # soft reset
             self.ReadBusy()
@@ -226,18 +348,18 @@ class EPD:
             linewidth = int(self.width / 8) + 1
 
         buf = [0xFF] * (linewidth * self.height)
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
 
-        if (imwidth == self.width and imheight == self.height):
+        if imwidth == self.width and imheight == self.height:
             logger.debug("Vertical")
             for y in range(imheight):
                 for x in range(imwidth):
                     if pixels[x, y] == 0:
                         x = imwidth - x
                         buf[int(x / 8) + y * linewidth] &= ~(0x80 >> (x % 8))
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             logger.debug("Horizontal")
             for y in range(imheight):
                 for x in range(imwidth):
@@ -310,5 +432,6 @@ class EPD:
         self.send_data(0x03)
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
 
 ### END OF FILE ###

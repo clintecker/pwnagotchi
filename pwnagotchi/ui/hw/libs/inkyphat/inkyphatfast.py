@@ -1,4 +1,5 @@
 """Inky pHAT e-Ink Display Driver."""
+
 from . import inkyfast
 
 
@@ -24,4 +25,5 @@ class InkyPHATFast(inkyfast.InkyFast):
             resolution=(self.WIDTH, self.HEIGHT),
             colour=colour,
             h_flip=False,
-            v_flip=False)
+            v_flip=False,
+        )

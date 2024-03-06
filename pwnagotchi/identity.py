@@ -37,17 +37,19 @@ class KeyPair(object):
 
                 with open(self.pub_path) as fp:
                     self.pub_key = RSA.importKey(fp.read())
-                    self.pub_key_pem = self.pub_key.exportKey('PEM').decode("ascii")
+                    self.pub_key_pem = self.pub_key.exportKey("PEM").decode("ascii")
                     # python is special
-                    if 'RSA PUBLIC KEY' not in self.pub_key_pem:
-                        self.pub_key_pem = self.pub_key_pem.replace('PUBLIC KEY', 'RSA PUBLIC KEY')
+                    if "RSA PUBLIC KEY" not in self.pub_key_pem:
+                        self.pub_key_pem = self.pub_key_pem.replace(
+                            "PUBLIC KEY", "RSA PUBLIC KEY"
+                        )
 
                 pem_ascii = self.pub_key_pem.encode("ascii")
 
                 self.pub_key_pem_b64 = base64.b64encode(pem_ascii).decode("ascii")
                 self.fingerprint = hashlib.sha256(pem_ascii).hexdigest()
 
-                with open(self.fingerprint_path, 'w+t') as fp:
+                with open(self.fingerprint_path, "w+t") as fp:
                     fp.write(self.fingerprint)
 
                 # no exception, keys loaded correctly.
@@ -56,7 +58,9 @@ class KeyPair(object):
 
             except Exception as e:
                 # if we're here, loading the keys broke something ...
-                logging.exception("error loading keys, maybe corrupted, deleting and regenerating ...")
+                logging.exception(
+                    "error loading keys, maybe corrupted, deleting and regenerating ..."
+                )
                 try:
                     os.remove(self.priv_path)
                     os.remove(self.pub_path)

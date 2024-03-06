@@ -8,7 +8,9 @@ class EPD(object):
         self.dc_pin = config.DC_PIN
         self.width = 240
         self.height = 240
-        self.st7789 = ST7789.ST7789(config.spi, config.RST_PIN, config.DC_PIN, config.BL_PIN)
+        self.st7789 = ST7789.ST7789(
+            config.spi, config.RST_PIN, config.DC_PIN, config.BL_PIN
+        )
 
     def init(self):
         self.st7789.Init()
@@ -17,5 +19,5 @@ class EPD(object):
         self.st7789.clear()
 
     def display(self, image):
-        rgb_im = image.convert('RGB')
+        rgb_im = image.convert("RGB")
         self.st7789.ShowImage(rgb_im, 0, 0)

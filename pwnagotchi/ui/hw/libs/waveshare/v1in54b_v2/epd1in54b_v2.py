@@ -76,12 +76,12 @@ class EPD:
 
     def ReadBusy(self):
         logger.debug("e-Paper busy")
-        while (epdconfig.digital_read(self.busy_pin) == 1):
+        while epdconfig.digital_read(self.busy_pin) == 1:
             epdconfig.delay_ms(100)
         logger.debug("e-Paper busy release")
 
     def init(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
         # EPD hardware init start
         self.reset()
@@ -126,11 +126,15 @@ class EPD:
         buf = [0xFF] * int(self.width * self.height / 8)
         # Set buffer to value of Python Imaging Library image.
         # Image must be in mode 1.
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         if imwidth != self.width or imheight != self.height:
-            raise ValueError('Image must be same dimensions as display \
-                ({0}x{1}).'.format(self.width, self.height))
+            raise ValueError(
+                "Image must be same dimensions as display \
+                ({0}x{1}).".format(
+                    self.width, self.height
+                )
+            )
 
         pixels = image_monocolor.load()
         for y in range(self.height):
@@ -150,12 +154,12 @@ class EPD:
         buf = [0x00] * self.height * linewidth
 
         # send black data
-        if (blackimage != None):
+        if blackimage != None:
             self.send_command(0x24)  # DATA_START_TRANSMISSION_1
             self.send_data2(blackimage)
 
         # send red data
-        if (redimage != None):
+        if redimage != None:
             self.send_command(0x26)  # DATA_START_TRANSMISSION_2
             for i in range(0, int(self.width * self.height / 8)):
                 buf[i] = ~redimage[i]
@@ -173,7 +177,7 @@ class EPD:
             linewidth = int(self.width / 8) + 1
 
         self.send_command(0x24)  # DATA_START_TRANSMISSION_1
-        self.send_data2([0xff] * int(self.height * linewidth))
+        self.send_data2([0xFF] * int(self.height * linewidth))
 
         self.send_command(0x26)  # DATA_START_TRANSMISSION_2
         self.send_data2([0x00] * int(self.height * linewidth))
@@ -189,5 +193,6 @@ class EPD:
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
 
 ### END OF FILE ###

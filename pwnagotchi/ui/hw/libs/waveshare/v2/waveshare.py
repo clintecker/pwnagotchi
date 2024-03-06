@@ -85,7 +85,7 @@ def module_init():
     GPIO.setup(BUSY_PIN, GPIO.IN)
     SPI.max_speed_hz = 2000000
     SPI.mode = 0b00
-    return 0;
+    return 0
 
 
 # Display resolution
@@ -104,39 +104,161 @@ class EPD:
     FULL_UPDATE = 0
     PART_UPDATE = 1
     lut_full_update = [
-        0x80, 0x60, 0x40, 0x00, 0x00, 0x00, 0x00,  # LUT0: BB:     VS 0 ~7
-        0x10, 0x60, 0x20, 0x00, 0x00, 0x00, 0x00,  # LUT1: BW:     VS 0 ~7
-        0x80, 0x60, 0x40, 0x00, 0x00, 0x00, 0x00,  # LUT2: WB:     VS 0 ~7
-        0x10, 0x60, 0x20, 0x00, 0x00, 0x00, 0x00,  # LUT3: WW:     VS 0 ~7
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  # LUT4: VCOM:   VS 0 ~7
-
-        0x03, 0x03, 0x00, 0x00, 0x02,  # TP0 A~D RP0
-        0x09, 0x09, 0x00, 0x00, 0x02,  # TP1 A~D RP1
-        0x03, 0x03, 0x00, 0x00, 0x02,  # TP2 A~D RP2
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP3 A~D RP3
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP4 A~D RP4
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP5 A~D RP5
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP6 A~D RP6
-
-        0x15, 0x41, 0xA8, 0x32, 0x30, 0x0A,
+        0x80,
+        0x60,
+        0x40,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT0: BB:     VS 0 ~7
+        0x10,
+        0x60,
+        0x20,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT1: BW:     VS 0 ~7
+        0x80,
+        0x60,
+        0x40,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT2: WB:     VS 0 ~7
+        0x10,
+        0x60,
+        0x20,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT3: WW:     VS 0 ~7
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT4: VCOM:   VS 0 ~7
+        0x03,
+        0x03,
+        0x00,
+        0x00,
+        0x02,  # TP0 A~D RP0
+        0x09,
+        0x09,
+        0x00,
+        0x00,
+        0x02,  # TP1 A~D RP1
+        0x03,
+        0x03,
+        0x00,
+        0x00,
+        0x02,  # TP2 A~D RP2
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP3 A~D RP3
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP4 A~D RP4
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP5 A~D RP5
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP6 A~D RP6
+        0x15,
+        0x41,
+        0xA8,
+        0x32,
+        0x30,
+        0x0A,
     ]
 
     lut_partial_update = [  # 20 bytes
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  # LUT0: BB:     VS 0 ~7
-        0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  # LUT1: BW:     VS 0 ~7
-        0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  # LUT2: WB:     VS 0 ~7
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  # LUT3: WW:     VS 0 ~7
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  # LUT4: VCOM:   VS 0 ~7
-
-        0x0A, 0x00, 0x00, 0x00, 0x00,  # TP0 A~D RP0
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP1 A~D RP1
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP2 A~D RP2
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP3 A~D RP3
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP4 A~D RP4
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP5 A~D RP5
-        0x00, 0x00, 0x00, 0x00, 0x00,  # TP6 A~D RP6
-
-        0x15, 0x41, 0xA8, 0x32, 0x30, 0x0A,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT0: BB:     VS 0 ~7
+        0x80,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT1: BW:     VS 0 ~7
+        0x40,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT2: WB:     VS 0 ~7
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT3: WW:     VS 0 ~7
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # LUT4: VCOM:   VS 0 ~7
+        0x0A,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP0 A~D RP0
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP1 A~D RP1
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP2 A~D RP2
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP3 A~D RP3
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP4 A~D RP4
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP5 A~D RP5
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,  # TP6 A~D RP6
+        0x15,
+        0x41,
+        0xA8,
+        0x32,
+        0x30,
+        0x0A,
     ]
 
     # Hardware reset
@@ -157,7 +279,7 @@ class EPD:
         spi_writebyte([data])
 
     def wait_until_idle(self):
-        while (digital_read(self.busy_pin) == 1):  # 0: idle, 1: busy
+        while digital_read(self.busy_pin) == 1:  # 0: idle, 1: busy
             delay_ms(100)
 
     def TurnOnDisplay(self):
@@ -167,11 +289,11 @@ class EPD:
         self.wait_until_idle()
 
     def init(self, update):
-        if (module_init() != 0):
+        if module_init() != 0:
             return -1
         # EPD hardware init start
         self.reset()
-        if (update == self.FULL_UPDATE):
+        if update == self.FULL_UPDATE:
             self.wait_until_idle()
             self.send_command(0x12)  # soft reset
             self.wait_until_idle()
@@ -263,18 +385,18 @@ class EPD:
             linewidth = self.width // 8 + 1
 
         buf = [0xFF] * (linewidth * self.height)
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
 
-        if (imwidth == self.width and imheight == self.height):
+        if imwidth == self.width and imheight == self.height:
             # print("Vertical")
             for y in range(imheight):
                 for x in range(imwidth):
                     if pixels[x, y] == 0:
                         x = imwidth - x
                         buf[x // 8 + y * linewidth] &= ~(0x80 >> (x % 8))
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             # print("Horizontal")
             for y in range(imheight):
                 for x in range(imwidth):

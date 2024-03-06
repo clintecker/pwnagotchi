@@ -76,12 +76,12 @@ class EPD:
 
     def ReadBusy(self):
         logger.debug("e-Paper busy")
-        while (epdconfig.digital_read(self.busy_pin) == 0):  # 0: idle, 1: busy
+        while epdconfig.digital_read(self.busy_pin) == 0:  # 0: idle, 1: busy
             epdconfig.delay_ms(100)
         logger.debug("e-Paper busy release")
 
     def init(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
         # EPD hardware init start
         self.reset()
@@ -93,13 +93,13 @@ class EPD:
         self.send_data2([0xCF, 0x08])
 
         self.send_command(0x06)  # BOOSTER_SOFT_START
-        self.send_data2([0xc7, 0xcc, 0x28])
+        self.send_data2([0xC7, 0xCC, 0x28])
 
         self.send_command(0x04)  # POWER_ON
         self.ReadBusy()
 
         self.send_command(0x30)  # PLL_CONTROL
-        self.send_data(0x3c)
+        self.send_data(0x3C)
 
         self.send_command(0x41)  # TEMPERATURE_CALIBRATION
         self.send_data(0x00)
@@ -112,14 +112,14 @@ class EPD:
 
         self.send_command(0x61)  # TCON_RESOLUTION
         self.send_data(EPD_WIDTH >> 8)  # source 640
-        self.send_data(EPD_WIDTH & 0xff)
+        self.send_data(EPD_WIDTH & 0xFF)
         self.send_data(EPD_HEIGHT >> 8)  # gate 384
-        self.send_data(EPD_HEIGHT & 0xff)
+        self.send_data(EPD_HEIGHT & 0xFF)
 
         self.send_command(0x82)  # VCM_DC_SETTING
         self.send_data(0x1E)  # decide by LUT file
 
-        self.send_command(0xe5)  # FLASH MODE
+        self.send_command(0xE5)  # FLASH MODE
         self.send_data(0x03)
 
         # EPD hardware init end
@@ -131,13 +131,18 @@ class EPD:
         halfwidth = int(self.width / 2)
         buf = [0x33] * halfwidth * self.height
 
-        if (imwidth == self.width and imheight == self.height):
-            img = img.convert('1')
-        elif (imwidth == self.height and imheight == self.width):
-            img = img.rotate(90, expand=True).convert('1')
+        if imwidth == self.width and imheight == self.height:
+            img = img.convert("1")
+        elif imwidth == self.height and imheight == self.width:
+            img = img.rotate(90, expand=True).convert("1")
             imwidth, imheight = img.size
         else:
-            logger.warning("Wrong image dimensions: must be " + str(self.width) + "x" + str(self.height))
+            logger.warning(
+                "Wrong image dimensions: must be "
+                + str(self.width)
+                + "x"
+                + str(self.height)
+            )
             # return a blank buffer
             return buf
 
@@ -147,13 +152,13 @@ class EPD:
             offset = y * halfwidth
             for x in range(1, imwidth, 2):
                 i = offset + x // 2
-                if (pixels[x - 1, y] > 191):
-                    if (pixels[x, y] > 191):
+                if pixels[x - 1, y] > 191:
+                    if pixels[x, y] > 191:
                         buf[i] = 0x33
                     else:
                         buf[i] = 0x30
                 else:
-                    if (pixels[x, y] > 191):
+                    if pixels[x, y] > 191:
                         buf[i] = 0x03
                     else:
                         buf[i] = 0x00
@@ -178,8 +183,10 @@ class EPD:
         self.ReadBusy()
 
         self.send_command(0x07)  # DEEP_SLEEP
-        self.send_data(0XA5)
+        self.send_data(0xA5)
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
+
 ### END OF FILE ###

@@ -1,4 +1,4 @@
-#qCopyright 2013-2015 Pervasive Displays, Inc.
+# qCopyright 2013-2015 Pervasive Displays, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,11 +21,15 @@ import os
 import sys
 
 if sys.version_info < (3,):
+
     def b(x):
         return x
+
 else:
+
     def b(x):
-        return x.encode('ISO-8859-1')
+        return x.encode("ISO-8859-1")
+
 
 class EPDError(Exception):
     def __init__(self, value):
@@ -36,29 +40,30 @@ class EPDError(Exception):
 
 
 class EPD(object):
-
     """EPD E-Ink interface
 
-to use:
-  from EPD import EPD
+    to use:
+      from EPD import EPD
 
-  epd = EPD([path='/path/to/epd'], [auto=boolean], [rotation = 0|90|180|270])
+      epd = EPD([path='/path/to/epd'], [auto=boolean], [rotation = 0|90|180|270])
 
-  image = Image.new('1', epd.size, 0)
-  # draw on image
-  epd.clear()         # clear the panel
-  epd.display(image)  # transfer image data
-  epd.update()        # refresh the panel image - not needed if auto=true
-"""
+      image = Image.new('1', epd.size, 0)
+      # draw on image
+      epd.clear()         # clear the panel
+      epd.display(image)  # transfer image data
+      epd.update()        # refresh the panel image - not needed if auto=true
+    """
 
-
-    PANEL_RE = re.compile('^([A-Za-z]+)\s+(\d+\.\d+)\s+(\d+)x(\d+)\s+COG\s+(\d+)\s+FILM\s+(\d+)\s*$', flags=0)
+    PANEL_RE = re.compile(
+        "^([A-Za-z]+)\s+(\d+\.\d+)\s+(\d+)x(\d+)\s+COG\s+(\d+)\s+FILM\s+(\d+)\s*$",
+        flags=0,
+    )
 
     def __init__(self, *args, **kwargs):
-        self._epd_path = '/dev/epd'
+        self._epd_path = "/dev/epd"
         self._width = 200
         self._height = 96
-        self._panel = 'EPD 2.0'
+        self._panel = "EPD 2.0"
         self._cog = 0
         self._film = 0
         self._auto = False
@@ -68,34 +73,34 @@ to use:
 
         if len(args) > 0:
             self._epd_path = args[0]
-        elif 'epd' in kwargs:
-            self._epd_path = kwargs['epd']
+        elif "epd" in kwargs:
+            self._epd_path = kwargs["epd"]
 
-        if ('auto' in kwargs) and kwargs['auto']:
+        if ("auto" in kwargs) and kwargs["auto"]:
             self._auto = True
-        if ('rotation' in kwargs):
-            rot = kwargs['rotation']
+        if "rotation" in kwargs:
+            rot = kwargs["rotation"]
             if rot in (0, 90, 180, 270):
                 self._rotation = rot
             else:
-                raise EPDError('rotation can only be 0, 90, 180 or 270')
+                raise EPDError("rotation can only be 0, 90, 180 or 270")
 
-        with open(os.path.join(self._epd_path, 'version')) as f:
-            self._version = f.readline().rstrip('\n')
+        with open(os.path.join(self._epd_path, "version")) as f:
+            self._version = f.readline().rstrip("\n")
 
-        with open(os.path.join(self._epd_path, 'panel')) as f:
-            line = f.readline().rstrip('\n')
+        with open(os.path.join(self._epd_path, "panel")) as f:
+            line = f.readline().rstrip("\n")
             m = self.PANEL_RE.match(line)
             if m is None:
-                raise EPDError('invalid panel string')
-            self._panel = m.group(1) + ' ' + m.group(2)
+                raise EPDError("invalid panel string")
+            self._panel = m.group(1) + " " + m.group(2)
             self._width = int(m.group(3))
             self._height = int(m.group(4))
             self._cog = int(m.group(5))
             self._film = int(m.group(6))
 
         if self._width < 1 or self._height < 1:
-            raise EPDError('invalid panel geometry')
+            raise EPDError("invalid panel geometry")
         if self._rotation in (90, 270):
             self._width, self._height = self._height, self._width
 
@@ -145,7 +150,7 @@ to use:
     @rotation.setter
     def rotation(self, rot):
         if rot not in (0, 90, 180, 270):
-            raise EPDError('rotation can only be 0, 90, 180 or 270')
+            raise EPDError("rotation can only be 0, 90, 180 or 270")
         if abs(self._rotation - rot) == 90 or abs(self._rotation - rot) == 270:
             self._width, self._height = self._height, self._width
         self._rotation = rot
@@ -162,11 +167,11 @@ to use:
             self._uselm75b = False
 
     def error_status(self):
-        with open(os.path.join(self._epd_path, 'error'), 'r') as f:
-            return(f.readline().rstrip('\n'))
+        with open(os.path.join(self._epd_path, "error"), "r") as f:
+            return f.readline().rstrip("\n")
 
     def rotation_angle(self, rotation):
-        angles = { 90 : Image.ROTATE_90, 180 : Image.ROTATE_180, 270 : Image.ROTATE_270 }
+        angles = {90: Image.ROTATE_90, 180: Image.ROTATE_180, 270: Image.ROTATE_270}
         return angles[rotation]
 
     def display(self, image):
@@ -178,36 +183,35 @@ to use:
             image = ImageOps.grayscale(image).convert("1", dither=Image.FLOYDSTEINBERG)
 
         if image.mode != "1":
-            raise EPDError('only single bit images are supported')
+            raise EPDError("only single bit images are supported")
 
         if image.size != self.size:
-            raise EPDError('image size mismatch')
+            raise EPDError("image size mismatch")
 
         if self._rotation != 0:
             image = image.transpose(self.rotation_angle(self._rotation))
 
-        with open(os.path.join(self._epd_path, 'LE', 'display_inverse'), 'r+b') as f:
+        with open(os.path.join(self._epd_path, "LE", "display_inverse"), "r+b") as f:
             f.write(image.tobytes())
 
         if self.auto:
             self.update()
 
-
     def update(self):
-        self._command('U')
+        self._command("U")
 
     def partial_update(self):
-        self._command('P')
+        self._command("P")
 
     def fast_update(self):
-        self._command('F')
+        self._command("F")
 
     def clear(self):
-        self._command('C')
+        self._command("C")
 
     def _command(self, c):
         if self._uselm75b:
-            with open(os.path.join(self._epd_path, 'temperature'), 'wb') as f:
+            with open(os.path.join(self._epd_path, "temperature"), "wb") as f:
                 f.write(b(repr(self._lm75b.getTempC())))
-        with open(os.path.join(self._epd_path, 'command'), 'wb') as f:
+        with open(os.path.join(self._epd_path, "command"), "wb") as f:
             f.write(b(c))

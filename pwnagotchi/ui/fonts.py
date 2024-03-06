@@ -1,7 +1,7 @@
 from PIL import ImageFont
 
 # should not be changed
-FONT_NAME = 'DejaVuSansMono'
+FONT_NAME = "DejaVuSansMono"
 
 # can be changed
 STATUS_FONT_NAME = None
@@ -17,8 +17,8 @@ Huge = None
 
 def init(config):
     global STATUS_FONT_NAME, SIZE_OFFSET
-    STATUS_FONT_NAME = config['ui']['font']['name']
-    SIZE_OFFSET = config['ui']['font']['size_offset']
+    STATUS_FONT_NAME = config["ui"]["font"]["name"]
+    SIZE_OFFSET = config["ui"]["font"]["size_offset"]
     setup(10, 8, 10, 25, 25, 9)
 
 

@@ -81,33 +81,33 @@ class EPD:
     # Read Busy
     def ReadBusy(self):
         logger.debug("e-Paper busy")
-        while (epdconfig.digital_read(self.busy_pin) == 1):  # 0: idle, 1: busy
+        while epdconfig.digital_read(self.busy_pin) == 1:  # 0: idle, 1: busy
             epdconfig.delay_ms(10)
         logger.debug("e-Paper busy release")
 
     # Setting the display window
     def SetWindows(self, Xstart, Ystart, Xend, Yend):
         self.send_command(0x44)
-        self.send_data((Xstart >> 3) & 0xff)
-        self.send_data((Xend >> 3) & 0xff)
+        self.send_data((Xstart >> 3) & 0xFF)
+        self.send_data((Xend >> 3) & 0xFF)
 
         self.send_command(0x45)
-        self.send_data(Ystart & 0xff)
-        self.send_data((Ystart >> 8) & 0xff)
-        self.send_data(Yend & 0xff)
-        self.send_data((Yend >> 8) & 0xff)
+        self.send_data(Ystart & 0xFF)
+        self.send_data((Ystart >> 8) & 0xFF)
+        self.send_data(Yend & 0xFF)
+        self.send_data((Yend >> 8) & 0xFF)
 
     # Set Cursor
     def SetCursor(self, Xstart, Ystart):
         self.send_command(0x4E)
-        self.send_data(Xstart & 0xff)
+        self.send_data(Xstart & 0xFF)
         self.send_command(0x4F)
-        self.send_data(Ystart & 0xff)
-        self.send_data((Ystart >> 8) & 0xff)
+        self.send_data(Ystart & 0xFF)
+        self.send_data((Ystart >> 8) & 0xFF)
 
     # Initialize the e-Paper register
     def init(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
 
         self.reset()
@@ -131,18 +131,18 @@ class EPD:
     def getbuffer(self, image):
         # logger.debug("bufsiz = ",int(self.width/8) * self.height)
         buf = [0xFF] * (int(self.width / 8) * self.height)
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
         # logger.debug("imwidth = %d, imheight = %d",imwidth,imheight)
-        if (imwidth == self.width and imheight == self.height):
+        if imwidth == self.width and imheight == self.height:
             logger.debug("Vertical")
             for y in range(imheight):
                 for x in range(imwidth):
                     # Set the bits for the column of pixels at the current position.
                     if pixels[x, y] == 0:
                         buf[int((x + y * self.width) / 8)] &= ~(0x80 >> (x % 8))
-        elif (imwidth == self.height and imheight == self.width):
+        elif imwidth == self.height and imheight == self.width:
             logger.debug("Horizontal")
             for y in range(imheight):
                 for x in range(imwidth):
@@ -172,7 +172,7 @@ class EPD:
     # Clear the screen
     def Clear(self):
         self.send_command(0x24)
-        self.send_data2([0xff] * int(self.width * self.height / 8))
+        self.send_data2([0xFF] * int(self.width * self.height / 8))
 
         self.send_command(0x26)
         self.send_data2([0x00] * int(self.width * self.height / 8))
@@ -191,4 +191,6 @@ class EPD:
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
+
 ### END OF FILE ###

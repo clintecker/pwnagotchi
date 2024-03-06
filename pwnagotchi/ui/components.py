@@ -40,41 +40,65 @@ class FilledRect(Widget):
 
 
 class Text(Widget):
-    def __init__(self, value="", position=(0, 0), font=None, color=0, wrap=False, max_length=0, png=False):
+    def __init__(
+        self,
+        value="",
+        position=(0, 0),
+        font=None,
+        color=0,
+        wrap=False,
+        max_length=0,
+        png=False,
+    ):
         super().__init__(position, color)
         self.value = value
         self.font = font
         self.wrap = wrap
         self.max_length = max_length
-        self.wrapper = TextWrapper(width=self.max_length, replace_whitespace=False) if wrap else None
+        self.wrapper = (
+            TextWrapper(width=self.max_length, replace_whitespace=False)
+            if wrap
+            else None
+        )
         self.png = png
 
     def draw(self, canvas, drawer):
         if self.value is not None:
             if not self.png:
                 if self.wrap:
-                    text = '\n'.join(self.wrapper.wrap(self.value))
+                    text = "\n".join(self.wrapper.wrap(self.value))
                 else:
                     text = self.value
                 drawer.text(self.xy, text, font=self.font, fill=self.color)
             else:
                 self.image = Image.open(self.value)
-                self.image = self.image.convert('RGBA')
+                self.image = self.image.convert("RGBA")
                 self.pixels = self.image.load()
                 for y in range(self.image.size[1]):
                     for x in range(self.image.size[0]):
-                        if self.pixels[x,y][3] < 255:    # check alpha
-                            self.pixels[x,y] = (255, 255, 255, 255)
+                        if self.pixels[x, y][3] < 255:  # check alpha
+                            self.pixels[x, y] = (255, 255, 255, 255)
                 if self.color == 255:
-                    self._image = ImageOps.colorize(self.image.convert('L'), black = "white", white = "black")
+                    self._image = ImageOps.colorize(
+                        self.image.convert("L"), black="white", white="black"
+                    )
                 else:
                     self._image = self.image
-                self.image = self._image.convert('1')
+                self.image = self._image.convert("1")
                 canvas.paste(self.image, self.xy)
 
 
 class LabeledValue(Widget):
-    def __init__(self, label, value="", position=(0, 0), label_font=None, text_font=None, color=0, label_spacing=5):
+    def __init__(
+        self,
+        label,
+        value="",
+        position=(0, 0),
+        label_font=None,
+        text_font=None,
+        color=0,
+        label_spacing=5,
+    ):
         super().__init__(position, color)
         self.label = label
         self.value = value
@@ -88,4 +112,9 @@ class LabeledValue(Widget):
         else:
             pos = self.xy
             drawer.text(pos, self.label, font=self.label_font, fill=self.color)
-            drawer.text((pos[0] + self.label_spacing + 5 * len(self.label), pos[1]), self.value, font=self.text_font, fill=self.color)
+            drawer.text(
+                (pos[0] + self.label_spacing + 5 * len(self.label), pos[1]),
+                self.value,
+                font=self.text_font,
+                fill=self.color,
+            )

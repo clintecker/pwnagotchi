@@ -6,28 +6,28 @@
   vars:
     boards:
       - {
-        kernel: "6.1.21+",
-        name: "PiZeroW",
-        firmware: "brcmfmac43430-sdio.bin",
-        patch: "bcm43430a1/7_45_41_46",
-        cpu: arm1176,
-        arch_flags: "-arch armv6l"
+          kernel: "6.1.21+",
+          name: "PiZeroW",
+          firmware: "brcmfmac43430-sdio.bin",
+          patch: "bcm43430a1/7_45_41_46",
+          cpu: arm1176,
+          arch_flags: "-arch armv6l",
         }
       - {
-        kernel: "6.1.21-v7+",
-        name: "PiZero2W",
-        firmware: "brcmfmac43436-sdio.bin",
-        patch: "bcm43436b0/9_88_4_65",
-        cpu: any, #cortex-a53
-        arch_flags: "-arch armv7l"
+          kernel: "6.1.21-v7+",
+          name: "PiZero2W",
+          firmware: "brcmfmac43436-sdio.bin",
+          patch: "bcm43436b0/9_88_4_65",
+          cpu: any, #cortex-a53
+          arch_flags: "-arch armv7l",
         }
       - {
-        kernel: "6.1.21-v7l+",
-        name: "Pi4b_32",
-        firmware: "brcmfmac43455-sdio.bin",
-        patch: "bcm43455c0/7_45_206",
-        cpu: any, #cortex-a72
-        arch_flags: "-arch armv7l"
+          kernel: "6.1.21-v7l+",
+          name: "Pi4b_32",
+          firmware: "brcmfmac43455-sdio.bin",
+          patch: "bcm43455c0/7_45_206",
+          cpu: any, #cortex-a72
+          arch_flags: "-arch armv7l",
         }
     kernel:
       min: "6.1"
@@ -209,7 +209,7 @@
     - name: change hostname
       lineinfile:
         dest: /etc/hostname
-        regexp: '^raspberrypi'
+        regexp: "^raspberrypi"
         line: "{{pwnagotchi.hostname}}"
         state: present
       when: lookup('file', '/etc/hostname') == "raspberrypi"
@@ -225,17 +225,17 @@
 
     - name: Create custom plugin directory
       file:
-        path: '{{ pwnagotchi.custom_plugin_dir }}'
+        path: "{{ pwnagotchi.custom_plugin_dir }}"
         state: directory
 
     - name: update apt package cache
       apt:
         update_cache: yes
 
-    - name: install packages
-      apt:
-        name: "{{ packages.apt.install }}"
-        state: present
+    - name: Install packages with shell and debug output
+      shell: "apt-get install -y {{ packages.apt.install | join(' ') }} -o Dpkg::Options::='--debug=1'"
+      args:
+        warn: false # To suppress warnings about using shell instead of the apt module
 
     - name: update pip3, setuptools, wheel
       shell: "python3 -m pip install --upgrade pip setuptools wheel"
@@ -255,7 +255,7 @@
     # install libpcap before bettercap and pwngrid, so they use it
     - name: clone libpcap v1.9 from github
       git:
-        repo: 'https://github.com/the-tcpdump-group/libpcap.git'
+        repo: "https://github.com/the-tcpdump-group/libpcap.git"
         dest: /usr/local/src/libpcap
         version: libpcap-1.9
 
@@ -297,7 +297,7 @@
     - name: Delete the firmware blob files to avoid some nexmon crashing
       file:
         state: absent
-        path: '{{ item }}'
+        path: "{{ item }}"
       loop:
         - /usr/lib/firmware/brcm/brcmfmac43430-sdio.clm_blob
         - /usr/lib/firmware/brcm/brcmfmac43430-sdio.raspberrypi,model-zero-w.clm_blob
@@ -311,11 +311,11 @@
         state: absent
         path: /usr/local/src/nexmon/
 
-    - name: clone pwnagotchi repository
-      git:
-        repo: https://github.com/jayofelony/pwnagotchi.git
-        dest: /usr/local/src/pwnagotchi
-      register: pwnagotchigit
+    # - name: clone pwnagotchi repository
+    #   git:
+    #     repo: https://github.com/jayofelony/pwnagotchi.git
+    #     dest: /usr/local/src/pwnagotchi
+    #   register: pwnagotchigit
 
     # is this even necessary? Can't we just link from /home/pi/pwnagotchi to /usr/local/{bin,lib,etc}
     # then just git update in the home dir and encourage hacking?
@@ -324,7 +324,7 @@
       command: "python3 setup.py sdist bdist_wheel"
       args:
         chdir: /usr/local/src/pwnagotchi
-      when: (pwnagotchigit.changed) or (pip_packages['pwnagotchi'] is undefined) or (pip_packages['pwnagotchi'] != pwnagotchi_version)
+      when: (pip_packages['pwnagotchi'] is undefined) or (pip_packages['pwnagotchi'] != pwnagotchi_version)
 
     - name: download torch whl
       get_url:
@@ -346,7 +346,7 @@
       environment:
         QEMU_CPU: arm1176
         QEMU_UNAME: "{{ kernel.full }}"
-      when: (pwnagotchigit.changed) or (pip_packages['pwnagotchi'] is undefined) or (pip_packages['pwnagotchi'] != pwnagotchi_version)
+      when: (pip_packages['pwnagotchi'] is undefined) or (pip_packages['pwnagotchi'] != pwnagotchi_version)
 
     - name: create /usr/local/share/pwnagotchi/ folder
       file:
@@ -473,14 +473,14 @@
       lineinfile:
         dest: /boot/config.txt
         insertafter: EOF
-        line: '{{ item }}'
+        line: "{{ item }}"
       with_items: "{{system.boot_options}}"
 
     - name: adjust /etc/modules
       lineinfile:
         dest: /etc/modules
         insertafter: EOF
-        line: '{{ item }}'
+        line: "{{ item }}"
       with_items: "{{system.modules}}"
 
     - name: change root partition
@@ -496,7 +496,7 @@
         backrefs: True
         state: present
         backup: no
-        regexp: '(.*)$'
+        regexp: "(.*)$"
         line: '\1 modules-load=dwc2,g_ether'
 
     - name: add firmware packages to hold
@@ -532,7 +532,7 @@
     - name: make /root readable, becauase that's where all the files are
       file:
         path: /root
-        mode: '755'
+        mode: "755"
 
     - name: fix permissions on /home/pi
       file:

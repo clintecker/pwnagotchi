@@ -77,7 +77,7 @@ class EPD:
     def ReadBusy(self):
         logger.debug("e-Paper busy")
         busy = epdconfig.digital_read(self.busy_pin)
-        while (busy == 1):
+        while busy == 1:
             busy = epdconfig.digital_read(self.busy_pin)
             epdconfig.delay_ms(20)
         epdconfig.delay_ms(20)
@@ -90,7 +90,7 @@ class EPD:
         self.ReadBusy()
 
     def init(self):
-        if (epdconfig.module_init() != 0):
+        if epdconfig.module_init() != 0:
             return -1
         # EPD hardware init start
         self.reset()
@@ -145,7 +145,7 @@ class EPD:
     def getbuffer(self, image):
         # logger.debug("bufsiz = ",int(self.width/8) * self.height)
         buf = [0xFF] * (int(self.width / 8) * self.height)
-        image_monocolor = image.convert('1')
+        image_monocolor = image.convert("1")
         imwidth, imheight = image_monocolor.size
         pixels = image_monocolor.load()
         # logger.debug("imwidth = %d, imheight = %d",imwidth,imheight)
@@ -185,4 +185,6 @@ class EPD:
 
         epdconfig.delay_ms(2000)
         epdconfig.module_exit()
+
+
 ### END OF FILE ###
